@@ -1,0 +1,110 @@
+{
+  "navbar": {
+    "home": "Home",
+    "features": "Features",
+    "marketplace": "Marketplace",
+    "about": "About",
+    "login": "Login",
+    "signup": "Sign Up",
+    "agri_store": "Agri Store",
+    "insurance": "Insurance"
+  },
+  "dashboard": {
+    "my_crops": "My Crops",
+    "add_crop": "Add Crop",
+    "orders": "Orders",
+    "marketplace": "Marketplace",
+    "weather": "Weather",
+    "balance": "Balance",
+    "total_earnings": "Total Earnings",
+    "active_listings": "Active Listings",
+    "my_listings": "My Listings",
+    "upload_crop": "Upload Crop",
+    "my_orders": "My Orders",
+    "support": "Support",
+    "logout": "Logout",
+    "total_orders": "Total Orders",
+    "market_rank": "Market Rank",
+    "overview": "Overview"
+  },
+  "buttons": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "place_bid": "Place Bid",
+    "add_listing": "Add Listing",
+    "buy_product": "Buy Product",
+    "buy": "Buy",
+    "sell": "Sell",
+    "get_started": "Get Started Free",
+    "explore_marketplace": "Explore Marketplace",
+    "add": "Add",
+    "added": "Added",
+    "apply_now": "Apply Now",
+    "submit_application": "Submit Application",
+    "create_account": "Create Account"
+  },
+  "landing": {
+    "hero_tagline": "India's #1 AgriTech Platform",
+    "hero_title_1": "Trusted Digital Partner for",
+    "hero_title_2": "Farming Success",
+    "hero_desc": "A platform helping farmers get better price discovery and connect directly with buyers.",
+    "stats_farmers": "Farmers Onboarded",
+    "stats_volume": "Trade Volume",
+    "stats_cities": "Cities Covered",
+    "features_title": "Everything You Need to Succeed",
+    "features_desc": "Comprehensive tools designed for modern Indian farming.",
+    "how_it_works": "Simple 3 Steps to Get Started",
+    "benefits_title": "Why 50,000+ Farmers Choose KrishiSaathi"
+  },
+  "store": {
+    "title": "Agri Input Store",
+    "desc": "Quality fertilizers, seeds, and farming tools at best prices.",
+    "fertilizers": "Fertilizers",
+    "seeds": "Seeds",
+    "tools": "Tools",
+    "items": "items"
+  },
+  "insurance": {
+    "title": "Crop Insurance",
+    "desc": "Protect your crops with government and private insurance plans.",
+    "popular": "Popular",
+    "coverage": "Coverage",
+    "covered_crops": "Covered Crops"
+  },
+  "chat": {
+    "title": "KrishiSaathi Support",
+    "online": "Online",
+    "placeholder": "Type your message..."
+  },
+  "auth": {
+    "login_welcome": "Welcome back!",
+    "login_desc": "Login to access your dashboard.",
+    "email_phone": "Email or Phone",
+    "password": "Password",
+    "remember": "Remember me",
+    "forgot": "Forgot password?",
+    "no_account": "Don't have an account?",
+    "signup_welcome": "Join KrishiSaathi",
+    "signup_desc": "Start your journey towards better farming and trading today.",
+    "create_account": "Create Account",
+    "role_farmer": "Farmer",
+    "role_buyer": "Buyer",
+    "full_name": "Full Name",
+    "phone": "Phone Number",
+    "email": "Email",
+    "already_account": "Already have an account?"
+  },
+  "footer": {
+    "desc": "Empowering Indian farmers with modern technology for better price discovery and direct market access.",
+    "quick_links": "Quick Links",
+    "support_title": "Support",
+    "help_center": "Help Center",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "faqs": "FAQs",
+    "contact": "Contact Us",
+    "address": "AgriTech Park, Pune, Maharashtra 411001",
+    "rights": "© 2026 KrishiSaathi. All rights reserved.",
+    "made_with": "Made with ❤️ for Indian Farmers"
+  }
+}
