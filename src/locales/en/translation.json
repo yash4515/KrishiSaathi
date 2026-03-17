@@ -7,7 +7,8 @@
     "login": "Login",
     "signup": "Sign Up",
     "agri_store": "Agri Store",
-    "insurance": "Insurance"
+    "insurance": "Insurance",
+    "samachar": "News & Schemes"
   },
   "dashboard": {
     "my_crops": "My Crops",
@@ -75,6 +76,17 @@
     "title": "KrishiSaathi Support",
     "online": "Online",
     "placeholder": "Type your message..."
+  },
+  "samachar": {
+    "title": "Farmer News & Schemes",
+    "subtitle": "Stay updated with the latest agricultural government schemes, news, and weather alerts.",
+    "search_placeholder": "Search schemes or news...",
+    "tab_schemes": "Govt Schemes",
+    "tab_news": "Latest News",
+    "learn_more": "Learn More",
+    "eligibility": "Eligibility",
+    "benefits": "Benefits",
+    "no_results": "No results found"
   },
   "auth": {
     "login_welcome": "Welcome back!",

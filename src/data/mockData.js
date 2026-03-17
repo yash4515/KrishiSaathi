@@ -1,13 +1,13 @@
 export const mockCrops = [
-    { id: 1, name: 'Organic Wheat', quantity: '500 kg', priceRange: '₹2,200 - ₹2,500/qt', location: 'Indore, MP', rating: 4.5, farmer: 'Rajesh Kumar', image: '🌾', bids: 12, category: 'grains' },
-    { id: 2, name: 'Basmati Rice', quantity: '300 kg', priceRange: '₹3,500 - ₹4,000/qt', location: 'Dehradun, UK', rating: 4.8, farmer: 'Suresh Patel', image: '🍚', bids: 8, category: 'grains' },
-    { id: 3, name: 'Fresh Tomatoes', quantity: '200 kg', priceRange: '₹800 - ₹1,200/qt', location: 'Nashik, MH', rating: 4.2, farmer: 'Manoj Jadhav', image: '🍅', bids: 15, category: 'vegetables' },
+    { id: 1, name: 'Organic Wheat', quantity: '500 kg', priceRange: '₹2,200 - ₹2,500/qt', location: 'Indore, MP', rating: 4.5, farmer: 'Rajesh Kumar', image: '/photos/organic wheat.jpg', bids: 12, category: 'grains' },
+    { id: 2, name: 'Basmati Rice', quantity: '300 kg', priceRange: '₹3,500 - ₹4,000/qt', location: 'Dehradun, UK', rating: 4.8, farmer: 'Suresh Patel', image: '/photos/rice.jpg', bids: 8, category: 'grains' },
+    { id: 3, name: 'Fresh Tomatoes', quantity: '200 kg', priceRange: '₹800 - ₹1,200/qt', location: 'Nashik, MH', rating: 4.2, farmer: 'Manoj Jadhav', image: '/photos/fresh tomato.jpg', bids: 15, category: 'vegetables' },
     { id: 4, name: 'Green Chilli', quantity: '100 kg', priceRange: '₹1,500 - ₹2,000/qt', location: 'Guntur, AP', rating: 4.6, farmer: 'Venkat Reddy', image: '🌶️', bids: 6, category: 'vegetables' },
-    { id: 5, name: 'Alphonso Mango', quantity: '400 kg', priceRange: '₹5,000 - ₹7,000/qt', location: 'Ratnagiri, MH', rating: 4.9, farmer: 'Prakash Desai', image: '🥭', bids: 22, category: 'fruits' },
-    { id: 6, name: 'Cotton', quantity: '800 kg', priceRange: '₹6,000 - ₹6,500/qt', location: 'Amravati, MH', rating: 4.3, farmer: 'Ganesh Patil', image: '🏵️', bids: 9, category: 'cash_crops' },
+    { id: 5, name: 'Alphonso Mango', quantity: '400 kg', priceRange: '₹5,000 - ₹7,000/qt', location: 'Ratnagiri, MH', rating: 4.9, farmer: 'Prakash Desai', image: '/photos/alphonso mango.jpg', bids: 22, category: 'fruits' },
+    { id: 6, name: 'Cotton', quantity: '800 kg', priceRange: '₹6,000 - ₹6,500/qt', location: 'Amravati, MH', rating: 4.3, farmer: 'Ganesh Patil', image: '/photos/cotton.jpg', bids: 9, category: 'cash_crops' },
     { id: 7, name: 'Soybean', quantity: '600 kg', priceRange: '₹4,200 - ₹4,800/qt', location: 'Ujjain, MP', rating: 4.4, farmer: 'Dinesh Sharma', image: '🫘', bids: 11, category: 'pulses' },
-    { id: 8, name: 'Fresh Onions', quantity: '1000 kg', priceRange: '₹1,000 - ₹1,800/qt', location: 'Lasalgaon, MH', rating: 4.1, farmer: 'Anil Wagh', image: '🧅', bids: 18, category: 'vegetables' },
-    { id: 9, name: 'Turmeric', quantity: '250 kg', priceRange: '₹7,500 - ₹9,000/qt', location: 'Erode, TN', rating: 4.7, farmer: 'Murugan S', image: '🟡', bids: 7, category: 'spices' },
+    { id: 8, name: 'Fresh Onions', quantity: '1000 kg', priceRange: '₹1,000 - ₹1,800/qt', location: 'Lasalgaon, MH', rating: 4.1, farmer: 'Anil Wagh', image: '/photos/fresh onions.jpg', bids: 18, category: 'vegetables' },
+    { id: 9, name: 'Turmeric', quantity: '250 kg', priceRange: '₹7,500 - ₹9,000/qt', location: 'Erode, TN', rating: 4.7, farmer: 'Murugan S', image: '/photos/turmeric.jpg', bids: 7, category: 'spices' },
     { id: 10, name: 'Sugarcane', quantity: '2000 kg', priceRange: '₹300 - ₹350/qt', location: 'Kolhapur, MH', rating: 4.0, farmer: 'Balaji Shinde', image: '🎋', bids: 5, category: 'cash_crops' },
 ];
 
@@ -59,3 +59,77 @@ export const mockWeather = {
         { day: 'Sun', high: 31, low: 18, icon: '☀️' },
     ],
 };
+
+export const mockSchemes = [
+    {
+        id: 1,
+        name: 'PM Kisan Samman Nidhi',
+        description: 'Direct income support of ₹6,000 per year to farmer families.',
+        eligibility: 'All landholding farmers families',
+        benefits: '₹6,000 per year in 3 equal installments',
+        link: 'https://pmkisan.gov.in/',
+        icon: '🌾'
+    },
+    {
+        id: 2,
+        name: 'Pradhan Mantri Fasal Bima Yojana (PMFBY)',
+        description: 'Comprehensive crop insurance from pre-sowing to post-harvest.',
+        eligibility: 'Farmers growing notified crops in notified areas',
+        benefits: 'Financial support in case of crop failure',
+        link: 'https://pmfby.gov.in/',
+        icon: '🛡️'
+    },
+    {
+        id: 3,
+        name: 'Kisan Credit Card (KCC)',
+        description: 'Adequate and timely credit support from the banking system.',
+        eligibility: 'Farmers, Tenant/Sharecroppers, SHGs/JLGs',
+        benefits: 'Short term credit for crop cultivation and related activities at 4% interest',
+        link: 'https://sbi.co.in/web/agri-rural/agriculture-banking/crop-loan/kisan-credit-card',
+        icon: '💳'
+    },
+    {
+        id: 4,
+        name: 'Soil Health Card Scheme',
+        description: 'Provides information on nutrient status of soil along with recommendations.',
+        eligibility: 'All farmers across the country',
+        benefits: 'Improved crop yield through balanced use of fertilizers',
+        link: 'https://soilhealth.dac.gov.in/',
+        icon: '🌱'
+    }
+];
+
+export const mockNews = [
+    {
+        id: 1,
+        category: 'Policy',
+        title: 'Government announces higher MSP for Kharif crops 2026-27',
+        date: '16 Mar 2026',
+        summary: 'The Cabinet has approved an increase in Minimum Support Prices (MSP) for all mandated Kharif crops...',
+        icon: '📈'
+    },
+    {
+        id: 2,
+        category: 'Weather',
+        title: 'Unseasonal rains expected in Central India',
+        date: '15 Mar 2026',
+        summary: 'IMD warns of light to moderate rainfall accompanied by thunderstorms in areas of MP, MH, and CG over the next 48 hours.',
+        icon: '⛈️'
+    },
+    {
+        id: 3,
+        category: 'Price Alert',
+        title: 'Onion prices surge by 15% across major mandis',
+        date: '14 Mar 2026',
+        summary: 'Due to reduced supply, wholesale prices of onions have seen a sharp increase in Lasalgaon and other major markets.',
+        icon: '🧅'
+    },
+    {
+        id: 4,
+        category: 'News',
+        title: 'New Agri-tech startup funding initiative launched',
+        date: '12 Mar 2026',
+        summary: 'A new ₹500 crore fund has been established to support innovative agricultural technology startups across the country.',
+        icon: '🚀'
+    }
+];

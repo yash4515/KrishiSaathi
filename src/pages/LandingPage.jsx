@@ -53,28 +53,30 @@ export default function LandingPage() {
             <Navbar />
 
             {/* Hero */}
-            <section className="relative min-h-screen flex items-center gradient-hero overflow-hidden">
-                <div className="absolute inset-0">
-                    <div className="absolute top-20 right-10 w-72 h-72 bg-primary-200/30 rounded-full blur-3xl" />
-                    <div className="absolute bottom-20 left-10 w-96 h-96 bg-primary-300/20 rounded-full blur-3xl" />
+            <section className="relative min-h-screen flex items-center overflow-hidden bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/photos/background.jpg')" }}>
+                <div className="absolute inset-0 bg-black/50"></div>
+                
+                <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-20 right-10 w-72 h-72 bg-primary-500/20 rounded-full blur-3xl mix-blend-screen" />
+                    <div className="absolute bottom-20 left-10 w-96 h-96 bg-primary-400/20 rounded-full blur-3xl mix-blend-screen" />
                 </div>
 
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40">
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40 z-10 text-white">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         <motion.div {...fadeUp}>
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 rounded-full mb-6">
-                                <Sprout className="w-4 h-4 text-primary-600" />
-                                <span className="text-sm font-semibold text-primary-700">{t('landing.hero_tagline')}</span>
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-6 border border-white/30">
+                                <Sprout className="w-4 h-4 text-white" />
+                                <span className="text-sm font-semibold text-white">{t('landing.hero_tagline')}</span>
                             </div>
 
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white drop-shadow-md">
                                 {t('landing.hero_title_1')}{' '}
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-400">
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-green-500">
                                     {t('landing.hero_title_2')}
                                 </span>
                             </h1>
 
-                            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-lg leading-relaxed">
+                            <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-lg leading-relaxed drop-shadow">
                                 {t('landing.hero_desc')}
                             </p>
 
@@ -87,20 +89,20 @@ export default function LandingPage() {
                                 </Link>
                             </div>
 
-                            <div className="flex items-center gap-8 mt-10">
+                            <div className="flex items-center gap-8 mt-10 p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 w-fit">
                                 <div>
-                                    <p className="text-2xl font-bold text-primary-700">50K+</p>
-                                    <p className="text-sm text-gray-500">{t('landing.stats_farmers')}</p>
+                                    <p className="text-2xl font-bold text-white">50K+</p>
+                                    <p className="text-sm text-gray-200">{t('landing.stats_farmers')}</p>
                                 </div>
-                                <div className="w-px h-10 bg-gray-200" />
+                                <div className="w-px h-10 bg-white/30" />
                                 <div>
-                                    <p className="text-2xl font-bold text-primary-700">₹100Cr+</p>
-                                    <p className="text-sm text-gray-500">{t('landing.stats_volume')}</p>
+                                    <p className="text-2xl font-bold text-white">₹100Cr+</p>
+                                    <p className="text-sm text-gray-200">{t('landing.stats_volume')}</p>
                                 </div>
-                                <div className="w-px h-10 bg-gray-200" />
+                                <div className="w-px h-10 bg-white/30" />
                                 <div>
-                                    <p className="text-2xl font-bold text-primary-700">200+</p>
-                                    <p className="text-sm text-gray-500">{t('landing.stats_cities')}</p>
+                                    <p className="text-2xl font-bold text-white">200+</p>
+                                    <p className="text-sm text-gray-200">{t('landing.stats_cities')}</p>
                                 </div>
                             </div>
                         </motion.div>
@@ -112,8 +114,8 @@ export default function LandingPage() {
                             className="hidden lg:flex justify-center"
                         >
                             <div className="relative">
-                                <div className="w-[420px] h-[420px] rounded-3xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center text-9xl shadow-2xl">
-                                    🌾
+                                <div className="w-[420px] h-[420px] rounded-3xl overflow-hidden shadow-2xl relative border-4 border-white/20 box-border">
+                                    <img src="/photos/front page.jpg" alt="Farmer in field" className="w-full h-full object-cover" />
                                 </div>
                                 <motion.div
                                     animate={{ y: [0, -10, 0] }}

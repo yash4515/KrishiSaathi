@@ -49,7 +49,13 @@ export default function MarketplacePage() {
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     {filtered.map((c, i) => (
                         <motion.div key={c.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-all group">
-                            <div className="h-36 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center text-5xl group-hover:scale-105 transition-transform">{c.image}</div>
+                            <div className="h-48 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center overflow-hidden">
+                                {c.image.startsWith('/') ? (
+                                    <img src={c.image} alt={c.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                ) : (
+                                    <span className="text-5xl group-hover:scale-105 transition-transform duration-500">{c.image}</span>
+                                )}
+                            </div>
                             <div className="p-4">
                                 <div className="flex items-start justify-between">
                                     <h3 className="font-semibold text-gray-900">{c.name}</h3>
@@ -90,7 +96,13 @@ export default function MarketplacePage() {
                             <button onClick={() => setShowBid(null)} className="p-1 hover:bg-gray-100 rounded-lg"><X className="w-5 h-5" /></button>
                         </div>
                         <div className="flex items-center gap-3 mb-4 p-3 bg-gray-50 rounded-xl">
-                            <span className="text-3xl">{showBid.image}</span>
+                            <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-primary-100 flex items-center justify-center text-3xl">
+                                {showBid.image.startsWith('/') ? (
+                                    <img src={showBid.image} alt={showBid.name} className="w-full h-full object-cover" />
+                                ) : (
+                                    <span>{showBid.image}</span>
+                                )}
+                            </div>
                             <div>
                                 <p className="font-semibold text-gray-900">{showBid.name}</p>
                                 <p className="text-sm text-gray-500">{showBid.quantity} • {showBid.location}</p>

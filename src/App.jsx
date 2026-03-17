@@ -11,6 +11,7 @@ import MarketplacePage from './pages/MarketplacePage';
 import AgriStorePage from './pages/AgriStorePage';
 import InsurancePage from './pages/InsurancePage';
 import ChatSupportPage from './pages/ChatSupportPage';
+import KrishiSamacharPage from './pages/KrishiSamacharPage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/store" element={<AgriStorePage />} />
           <Route path="/insurance" element={<InsurancePage />} />
           <Route path="/chat" element={<ChatSupportPage />} />
+          <Route path="/samachar" element={<KrishiSamacharPage />} />
 
           {/* Farmer Protected */}
           <Route path="/farmer" element={<ProtectedRoute role="farmer"><FarmerDashboard /></ProtectedRoute>} />
