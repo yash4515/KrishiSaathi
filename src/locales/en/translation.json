@@ -88,6 +88,17 @@
     "benefits": "Benefits",
     "no_results": "No results found"
   },
+  "chatbot": {
+    "title": "KrishiSaathi Assistant",
+    "greeting": "Namaste! 👋 I am your KrishiSaathi assistant. How can I help you today?",
+    "options": {
+      "schemes": "Government Schemes",
+      "prices": "Crop Prices",
+      "weather": "Weather Updates",
+      "insurance": "Crop Insurance Help",
+      "sell": "Sell Crops"
+    }
+  },
   "auth": {
     "login_welcome": "Welcome back!",
     "login_desc": "Login to access your dashboard.",

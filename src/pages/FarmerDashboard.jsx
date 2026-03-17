@@ -138,7 +138,13 @@ export default function FarmerDashboard() {
                         <motion.div key={c.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
                             className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
-                            <div className="h-32 bg-primary-50 flex items-center justify-center text-5xl">{c.image}</div>
+                            <div className="h-32 bg-primary-50 flex items-center justify-center text-5xl overflow-hidden">
+                                {c.image && c.image.startsWith('/') ? (
+                                    <img src={c.image} alt={c.name} className="w-full h-full object-cover" loading="lazy" />
+                                ) : (
+                                    c.image
+                                )}
+                            </div>
                             <div className="p-4">
                                 <h3 className="font-semibold text-gray-900">{c.name}</h3>
                                 <p className="text-sm text-gray-500">{c.quantity} • {c.location}</p>

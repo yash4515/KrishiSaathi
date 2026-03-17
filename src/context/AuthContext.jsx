@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
+import { authAPI } from '../services/api';
 
 export const AuthContext = createContext(null);
 
@@ -6,47 +7,57 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // On mount, check if stored token is still valid
     useEffect(() => {
         const stored = localStorage.getItem('krishisaathi_user');
         if (stored) {
             try {
-                setUser(JSON.parse(stored));
-            } catch { /* ignore */ }
+                const parsed = JSON.parse(stored);
+                setUser(parsed);
+                // Verify token with backend
+                authAPI.me()
+                    .then((res) => {
+                        const freshUser = { ...res.data.data.user, token: parsed.token };
+                        setUser(freshUser);
+                        localStorage.setItem('krishisaathi_user', JSON.stringify(freshUser));
+                    })
+                    .catch(() => {
+                        // Token expired or invalid — clear it
+                        setUser(null);
+                        localStorage.removeItem('krishisaathi_user');
+                    })
+                    .finally(() => setLoading(false));
+            } catch {
+                localStorage.removeItem('krishisaathi_user');
+                setLoading(false);
+            }
+        } else {
+            setLoading(false);
         }
-        setLoading(false);
     }, []);
 
     const login = async (email, password) => {
-        // Simulated login — replace with real API call
-        await new Promise(r => setTimeout(r, 800));
-        const mockUser = {
-            id: '1',
-            name: email.includes('farmer') ? 'Rajesh Kumar' : 'Amit Sharma',
-            email,
-            phone: '+91 98765 43210',
-            role: email.includes('farmer') ? 'farmer' : 'buyer',
-            avatar: null,
-            token: 'mock-jwt-token-' + Date.now(),
-        };
-        setUser(mockUser);
-        localStorage.setItem('krishisaathi_user', JSON.stringify(mockUser));
-        return mockUser;
+        const res = await authAPI.login({ email, password });
+        const { user: userData, token } = res.data.data;
+        const fullUser = { ...userData, token };
+        setUser(fullUser);
+        localStorage.setItem('krishisaathi_user', JSON.stringify(fullUser));
+        return fullUser;
     };
 
     const signup = async (data) => {
-        await new Promise(r => setTimeout(r, 800));
-        const mockUser = {
-            id: '2',
+        const res = await authAPI.register({
             name: data.name,
             email: data.email,
             phone: data.phone,
+            password: data.password,
             role: data.role,
-            avatar: null,
-            token: 'mock-jwt-token-' + Date.now(),
-        };
-        setUser(mockUser);
-        localStorage.setItem('krishisaathi_user', JSON.stringify(mockUser));
-        return mockUser;
+        });
+        const { user: userData, token } = res.data.data;
+        const fullUser = { ...userData, token };
+        setUser(fullUser);
+        localStorage.setItem('krishisaathi_user', JSON.stringify(fullUser));
+        return fullUser;
     };
 
     const logout = () => {

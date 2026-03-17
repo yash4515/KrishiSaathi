@@ -31,39 +31,54 @@ api.interceptors.response.use(
     }
 );
 
+// ─── Auth ───
 export const authAPI = {
     login: (data) => api.post('/auth/login', data),
-    signup: (data) => api.post('/auth/signup', data),
+    register: (data) => api.post('/auth/register', data),
     me: () => api.get('/auth/me'),
+    updateProfile: (data) => api.put('/auth/profile', data),
 };
 
+// ─── Crops (Farmer) ───
 export const cropAPI = {
-    list: (params) => api.get('/crops', { params }),
+    add: (data) => api.post('/crops/add', data),
+    myListings: () => api.get('/crops/my-listings'),
     get: (id) => api.get(`/crops/${id}`),
-    create: (data) => api.post('/crops', data),
     update: (id, data) => api.put(`/crops/${id}`, data),
     delete: (id) => api.delete(`/crops/${id}`),
 };
 
+// ─── Marketplace (Public + Buyer) ───
 export const marketAPI = {
-    search: (params) => api.get('/market/search', { params }),
-    bid: (data) => api.post('/market/bid', data),
-    bids: (cropId) => api.get(`/market/bids/${cropId}`),
+    list: (params) => api.get('/marketplace', { params }),
+    bid: (data) => api.post('/marketplace/bid', data),
+    bids: (listingId) => api.get(`/marketplace/bids/${listingId}`),
+    myBids: () => api.get('/marketplace/my-bids'),
+    acceptBid: (id) => api.put(`/marketplace/bid/${id}/accept`),
+    rejectBid: (id) => api.put(`/marketplace/bid/${id}/reject`),
+    withdrawBid: (id) => api.delete(`/marketplace/bid/${id}`),
 };
 
-export const storeAPI = {
-    products: (params) => api.get('/store/products', { params }),
-    order: (data) => api.post('/store/order', data),
+// ─── Orders ───
+export const orderAPI = {
+    create: (data) => api.post('/order/create', data),
+    history: () => api.get('/order/history'),
+    get: (id) => api.get(`/order/${id}`),
+    updateStatus: (id, data) => api.put(`/order/${id}/status`, data),
+    cancel: (id) => api.put(`/order/${id}/cancel`),
+    verifyPayment: (data) => api.post('/order/verify-payment', data),
 };
 
+// ─── Products (Agri Store) ───
+export const productAPI = {
+    list: (params) => api.get('/products', { params }),
+    get: (id) => api.get(`/products/${id}`),
+};
+
+// ─── Insurance ───
 export const insuranceAPI = {
-    plans: () => api.get('/insurance/plans'),
-    apply: (data) => api.post('/insurance/apply', data),
-};
-
-export const chatAPI = {
-    send: (data) => api.post('/chat/send', data),
-    history: () => api.get('/chat/history'),
+    list: () => api.get('/insurance'),
+    get: (id) => api.get(`/insurance/${id}`),
 };
 
 export default api;

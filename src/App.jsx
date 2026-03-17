@@ -12,6 +12,7 @@ import AgriStorePage from './pages/AgriStorePage';
 import InsurancePage from './pages/InsurancePage';
 import ChatSupportPage from './pages/ChatSupportPage';
 import KrishiSamacharPage from './pages/KrishiSamacharPage';
+import FloatingChatbot from './components/ui/FloatingChatbot';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        <FloatingChatbot />
       </Router>
     </AuthProvider>
   );

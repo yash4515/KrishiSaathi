@@ -111,10 +111,6 @@ export default function LoginPage() {
                         </button>
                     </form>
 
-                    <div className="mt-6 text-center text-sm text-gray-500">
-                        Tip: Use <strong className="text-primary-700">farmer@</strong> or <strong className="text-primary-700">buyer@</strong> in email to set role
-                    </div>
-
                     <p className="text-center mt-6 text-sm text-gray-600">
                         {t('auth.no_account')}{' '}
                         <Link to="/signup" className="text-primary-600 font-semibold hover:text-primary-700">
