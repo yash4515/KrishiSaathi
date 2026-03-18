@@ -16,6 +16,7 @@ const marketRoutes = require('./routes/marketRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const productRoutes = require('./routes/productRoutes');
 const insuranceRoutes = require('./routes/insuranceRoutes');
+const detectionRoutes = require('./routes/detectionRoutes');
 const priceRoutes    = require('./routes/priceRoutes');
 const newsRoutes     = require('./routes/newsRoutes');
 const { initJobs }   = require('./jobs');
@@ -73,6 +74,7 @@ app.use('/api/marketplace', marketRoutes);
 app.use('/api/order', orderRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/insurance', insuranceRoutes);
+app.use('/api/detection', detectionRoutes);
 app.use('/api/prices',   priceRoutes);
 app.use('/api/news',     newsRoutes);
 

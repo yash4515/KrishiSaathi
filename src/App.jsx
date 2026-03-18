@@ -18,6 +18,7 @@ import InsurancePage from './pages/InsurancePage';
 import ChatSupportPage from './pages/ChatSupportPage';
 import NewsletterPage from './pages/NewsletterPage';
 import SupportPage from './pages/SupportPage';
+import DiseaseDetectionPage from './pages/DiseaseDetectionPage';
 import FloatingChatbot from './components/ui/FloatingChatbot';
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
           <Route path="/chat" element={<ChatSupportPage />} />
           <Route path="/samachar" element={<Navigate to="/newsletter" replace />} />
           <Route path="/newsletter" element={<NewsletterPage />} />
+          <Route path="/detect" element={<DiseaseDetectionPage />} />
 
           {/* Farmer Protected */}
           <Route path="/farmer" element={<ProtectedRoute role="farmer"><FarmerDashboard /></ProtectedRoute>} />
@@ -44,6 +46,7 @@ function App() {
           <Route path="/farmer/store" element={<ProtectedRoute role="farmer"><AgriStorePage dashboard /></ProtectedRoute>} />
           <Route path="/farmer/insurance" element={<ProtectedRoute role="farmer"><InsurancePage dashboard /></ProtectedRoute>} />
           <Route path="/farmer/support" element={<ProtectedRoute role="farmer"><SupportPage /></ProtectedRoute>} />
+          <Route path="/farmer/detect" element={<ProtectedRoute role="farmer"><DiseaseDetectionPage dashboard /></ProtectedRoute>} />
 
           {/* Buyer Protected */}
           <Route path="/buyer" element={<ProtectedRoute role="buyer"><BuyerDashboard /></ProtectedRoute>} />
@@ -52,6 +55,7 @@ function App() {
           <Route path="/buyer/store" element={<ProtectedRoute role="buyer"><AgriStorePage dashboard /></ProtectedRoute>} />
           <Route path="/buyer/insurance" element={<ProtectedRoute role="buyer"><InsurancePage dashboard /></ProtectedRoute>} />
           <Route path="/buyer/support" element={<ProtectedRoute role="buyer"><SupportPage /></ProtectedRoute>} />
+          <Route path="/buyer/detect" element={<ProtectedRoute role="buyer"><DiseaseDetectionPage dashboard /></ProtectedRoute>} />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />

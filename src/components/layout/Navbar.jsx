@@ -25,7 +25,8 @@ export default function Navbar() {
         { to: '/marketplace', label: t('navbar.marketplace') },
         { to: '/store', label: t('navbar.agri_store') },
         { to: '/insurance', label: t('navbar.insurance') },
-        { to: '/newsletter', label: '📰 Newsletter' },
+        { to: '/newsletter', label: t('navbar.samachar') || '📰 Newsletter' },
+        { to: '/detect', label: t('navbar.detect') },
     ];
 
 
