@@ -1,43 +1,47 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import { mockOrders } from '../data/mockData';
 import { CheckCircle, Clock, Truck, FileCheck, Search, Filter, Download } from 'lucide-react';
 
-const statusCfg = {
-    confirmed: { icon: CheckCircle, cls: 'text-green-600 bg-green-50', label: 'Confirmed', step: 2 },
-    pending: { icon: Clock, cls: 'text-yellow-600 bg-yellow-50', label: 'Pending', step: 1 },
-    shipped: { icon: Truck, cls: 'text-blue-600 bg-blue-50', label: 'Shipped', step: 3 },
-    delivered: { icon: FileCheck, cls: 'text-purple-600 bg-purple-50', label: 'Delivered', step: 4 },
-};
-
-const statusFilters = ['All', 'pending', 'confirmed', 'shipped', 'delivered'];
-
-const allOrders = [
-    ...mockOrders,
-    { id: 5, crop: 'Alphonso Mango', buyer: 'FruitKart', quantity: '300 kg', price: '₹6,200/qt', status: 'confirmed', date: '2026-03-04', paymentStatus: 'Paid', buyerPhone: '+91 98765 43210' },
-    { id: 6, crop: 'Turmeric', buyer: 'SpiceLand', quantity: '100 kg', price: '₹8,500/qt', status: 'pending', date: '2026-03-03', paymentStatus: 'Pending', buyerPhone: '+91 87654 32109' },
-].map(o => ({
-    ...o,
-    paymentStatus: o.paymentStatus || (o.status === 'delivered' ? 'Paid' : o.status === 'pending' ? 'Pending' : 'Paid'),
-    buyerPhone: o.buyerPhone || '+91 99999 88888',
-}));
-
-const timelineSteps = [
-    { label: 'Order Placed', icon: Clock },
-    { label: 'Confirmed', icon: CheckCircle },
-    { label: 'Shipped', icon: Truck },
-    { label: 'Delivered', icon: FileCheck },
-];
-
 export default function FarmerOrders() {
+    const { t } = useTranslation();
+
+    const statusCfg = {
+        confirmed: { icon: CheckCircle, cls: 'text-green-600 bg-green-50', label: t('orders_page.confirmed'), step: 2 },
+        pending: { icon: Clock, cls: 'text-yellow-600 bg-yellow-50', label: t('orders_page.pending'), step: 1 },
+        shipped: { icon: Truck, cls: 'text-blue-600 bg-blue-50', label: t('orders_page.shipped'), step: 3 },
+        delivered: { icon: FileCheck, cls: 'text-purple-600 bg-purple-50', label: t('orders_page.delivered'), step: 4 },
+    };
+
+    const statusFilters = ['All', 'pending', 'confirmed', 'shipped', 'delivered'];
+
+    const allOrders = [
+        ...mockOrders,
+        { id: 5, crop: 'Alphonso Mango', buyer: 'FruitKart', quantity: '300 kg', price: '₹6,200/qt', status: 'confirmed', date: '2026-03-04', paymentStatus: 'Paid', buyerPhone: '+91 98765 43210' },
+        { id: 6, crop: 'Turmeric', buyer: 'SpiceLand', quantity: '100 kg', price: '₹8,500/qt', status: 'pending', date: '2026-03-03', paymentStatus: 'Pending', buyerPhone: '+91 87654 32109' },
+    ].map(o => ({
+        ...o,
+        paymentStatus: o.paymentStatus || (o.status === 'delivered' ? 'Paid' : o.status === 'pending' ? 'Pending' : 'Paid'),
+        buyerPhone: o.buyerPhone || '+91 99999 88888',
+    }));
+
+    const timelineSteps = [
+        { label: t('orders_page.order_placed'), icon: Clock },
+        { label: t('orders_page.confirmed'), icon: CheckCircle },
+        { label: t('orders_page.shipped'), icon: Truck },
+        { label: t('orders_page.delivered'), icon: FileCheck },
+    ];
+
     const [filter, setFilter] = useState('All');
     const [search, setSearch] = useState('');
     const [selectedOrder, setSelectedOrder] = useState(null);
 
     const filtered = allOrders.filter(o => {
         const matchStatus = filter === 'All' || o.status === filter;
-        const matchSearch = o.crop.toLowerCase().includes(search.toLowerCase()) || o.buyer.toLowerCase().includes(search.toLowerCase());
+        const cropName = t(`mock.${o.crop}`, { defaultValue: o.crop });
+        const matchSearch = cropName.toLowerCase().includes(search.toLowerCase()) || o.buyer.toLowerCase().includes(search.toLowerCase());
         return matchStatus && matchSearch;
     });
 
@@ -45,8 +49,8 @@ export default function FarmerOrders() {
         <DashboardLayout>
             {/* Header */}
             <div className="mb-6">
-                <h1 className="page-title">Orders</h1>
-                <p className="page-subtitle">{allOrders.length} total orders • {allOrders.filter(o => o.status === 'pending').length} pending</p>
+                <h1 className="page-title">{t('dashboard.orders')}</h1>
+                <p className="page-subtitle">{allOrders.length} {t('orders_page.total_orders_label')} • {allOrders.filter(o => o.status === 'pending').length} {t('orders_page.pending_label')}</p>
             </div>
 
             {/* Search & Filter */}
@@ -56,7 +60,7 @@ export default function FarmerOrders() {
                     <input
                         type="text"
                         className="input-field pl-10 !py-2.5 text-sm"
-                        placeholder="Search by crop or buyer..."
+                        placeholder={t('orders_page.search_crop_buyer')}
                         value={search}
                         onChange={e => setSearch(e.target.value)}
                     />
@@ -68,7 +72,7 @@ export default function FarmerOrders() {
                             onClick={() => setFilter(s)}
                             className={filter === s ? 'filter-chip-active' : 'filter-chip'}
                         >
-                            {s === 'All' ? 'All' : statusCfg[s]?.label || s}
+                            {s === 'All' ? t('orders_page.all') : statusCfg[s]?.label || s}
                         </button>
                     ))}
                 </div>
@@ -81,7 +85,7 @@ export default function FarmerOrders() {
                     <table className="w-full">
                         <thead className="bg-gray-50">
                             <tr>
-                                {['#', 'Crop', 'Buyer', 'Qty', 'Price', 'Payment', 'Status', 'Date', ''].map(h => (
+                                {['#', t('orders_page.crop'), t('farmer_dashboard.buyer'), t('farmer_dashboard.qty'), t('orders_page.price'), t('orders_page.payment'), t('farmer_dashboard.status'), t('farmer_dashboard.date'), ''].map(h => (
                                     <th key={h} className="text-left text-xs font-semibold text-gray-500 uppercase px-5 py-3">{h}</th>
                                 ))}
                             </tr>
@@ -92,13 +96,13 @@ export default function FarmerOrders() {
                                 return (
                                     <tr key={o.id} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => setSelectedOrder(o)}>
                                         <td className="px-5 py-4 text-sm text-gray-400">#{o.id}</td>
-                                        <td className="px-5 py-4 text-sm font-medium text-gray-900">{o.crop}</td>
+                                        <td className="px-5 py-4 text-sm font-medium text-gray-900">{t(`mock.${o.crop}`, { defaultValue: o.crop })}</td>
                                         <td className="px-5 py-4 text-sm text-gray-600">{o.buyer}</td>
                                         <td className="px-5 py-4 text-sm text-gray-600">{o.quantity}</td>
                                         <td className="px-5 py-4 text-sm font-semibold text-gray-800">{o.price}</td>
                                         <td className="px-5 py-4">
                                             <span className={`text-xs font-semibold ${o.paymentStatus === 'Paid' ? 'text-green-600' : 'text-yellow-600'}`}>
-                                                {o.paymentStatus}
+                                                {o.paymentStatus === 'Paid' ? t('orders_page.paid') : t('orders_page.pending')}
                                             </span>
                                         </td>
                                         <td className="px-5 py-4">
@@ -108,7 +112,7 @@ export default function FarmerOrders() {
                                         </td>
                                         <td className="px-5 py-4 text-sm text-gray-500">{o.date}</td>
                                         <td className="px-5 py-4">
-                                            <button className="text-xs text-primary-600 font-medium hover:text-primary-700">Details</button>
+                                            <button className="text-xs text-primary-600 font-medium hover:text-primary-700">{t('orders_page.details')}</button>
                                         </td>
                                     </tr>
                                 );
@@ -119,8 +123,8 @@ export default function FarmerOrders() {
                 {filtered.length === 0 && (
                     <div className="text-center py-12">
                         <p className="text-4xl mb-3">📋</p>
-                        <p className="text-gray-600 font-medium">No orders found</p>
-                        <p className="text-sm text-gray-400">Try changing the filter or search.</p>
+                        <p className="text-gray-600 font-medium">{t('orders_page.no_orders')}</p>
+                        <p className="text-sm text-gray-400">{t('orders_page.no_orders_hint')}</p>
                     </div>
                 )}
             </motion.div>
@@ -135,7 +139,7 @@ export default function FarmerOrders() {
                         onClick={e => e.stopPropagation()}
                     >
                         <div className="flex items-center justify-between mb-5">
-                            <h3 className="text-lg font-bold text-gray-900">Order #{selectedOrder.id}</h3>
+                            <h3 className="text-lg font-bold text-gray-900">{t('orders_page.order_details')} #{selectedOrder.id}</h3>
                             <button onClick={() => setSelectedOrder(null)} className="p-1.5 hover:bg-gray-100 rounded-lg">
                                 <span className="text-gray-400 text-xl">&times;</span>
                             </button>
@@ -144,32 +148,32 @@ export default function FarmerOrders() {
                         {/* Order Info */}
                         <div className="grid grid-cols-2 gap-4 mb-6">
                             <div className="bg-gray-50 rounded-xl p-3">
-                                <p className="text-xs text-gray-500">Crop</p>
-                                <p className="font-semibold text-gray-800">{selectedOrder.crop}</p>
+                                <p className="text-xs text-gray-500">{t('orders_page.crop')}</p>
+                                <p className="font-semibold text-gray-800">{t(`mock.${selectedOrder.crop}`, { defaultValue: selectedOrder.crop })}</p>
                             </div>
                             <div className="bg-gray-50 rounded-xl p-3">
-                                <p className="text-xs text-gray-500">Quantity</p>
+                                <p className="text-xs text-gray-500">{t('orders_page.quantity')}</p>
                                 <p className="font-semibold text-gray-800">{selectedOrder.quantity}</p>
                             </div>
                             <div className="bg-gray-50 rounded-xl p-3">
-                                <p className="text-xs text-gray-500">Price</p>
+                                <p className="text-xs text-gray-500">{t('orders_page.price')}</p>
                                 <p className="font-semibold text-gray-800">{selectedOrder.price}</p>
                             </div>
                             <div className="bg-gray-50 rounded-xl p-3">
-                                <p className="text-xs text-gray-500">Payment</p>
-                                <p className={`font-semibold ${selectedOrder.paymentStatus === 'Paid' ? 'text-green-600' : 'text-yellow-600'}`}>{selectedOrder.paymentStatus}</p>
+                                <p className="text-xs text-gray-500">{t('orders_page.payment')}</p>
+                                <p className={`font-semibold ${selectedOrder.paymentStatus === 'Paid' ? 'text-green-600' : 'text-yellow-600'}`}>{selectedOrder.paymentStatus === 'Paid' ? t('orders_page.paid') : t('orders_page.pending')}</p>
                             </div>
                         </div>
 
                         {/* Buyer Details */}
                         <div className="bg-blue-50 rounded-xl p-4 mb-6">
-                            <p className="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-2">Buyer Details</p>
+                            <p className="text-xs font-semibold text-blue-600 uppercase tracking-wider mb-2">{t('orders_page.buyer_details')}</p>
                             <p className="text-sm font-medium text-gray-800">{selectedOrder.buyer}</p>
                             <p className="text-sm text-gray-600">{selectedOrder.buyerPhone}</p>
                         </div>
 
                         {/* Order Timeline */}
-                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Order Timeline</p>
+                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">{t('orders_page.order_timeline')}</p>
                         <div className="space-y-3 mb-6">
                             {timelineSteps.map((step, i) => {
                                 const currentStep = statusCfg[selectedOrder.status].step;
@@ -183,14 +187,14 @@ export default function FarmerOrders() {
                                         <span className={`text-sm ${isCurrent ? 'font-semibold text-primary-700' : isCompleted ? 'text-gray-700' : 'text-gray-400'}`}>
                                             {step.label}
                                         </span>
-                                        {isCurrent && <span className="badge-green text-[10px]">Current</span>}
+                                        {isCurrent && <span className="badge-green text-[10px]">{t('orders_page.current')}</span>}
                                     </div>
                                 );
                             })}
                         </div>
 
                         <button className="btn-secondary w-full flex items-center justify-center gap-2 text-sm">
-                            <Download className="w-4 h-4" /> Download Invoice
+                            <Download className="w-4 h-4" /> {t('orders_page.download_invoice')}
                         </button>
                     </motion.div>
                 </div>

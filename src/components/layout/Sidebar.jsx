@@ -9,25 +9,6 @@ import {
     ShoppingCart, Newspaper
 } from 'lucide-react';
 
-const farmerLinks = [
-    { to: '/farmer', icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/farmer/listings', icon: Package, label: 'My Listings' },
-    { to: '/farmer/upload', icon: Upload, label: 'Upload Crop' },
-    { to: '/farmer/orders', icon: ClipboardList, label: 'Orders' },
-    { to: '/farmer/store', icon: Store, label: 'Agri Store' },
-    { to: '/farmer/insurance', icon: Shield, label: 'Insurance' },
-    { to: '/farmer/support', icon: HelpCircle, label: 'Support' },
-];
-
-const buyerLinks = [
-    { to: '/buyer', icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/buyer/marketplace', icon: ShoppingCart, label: 'Marketplace' },
-    { to: '/buyer/orders', icon: ClipboardList, label: 'Orders' },
-    { to: '/buyer/store', icon: Store, label: 'Agri Store' },
-    { to: '/buyer/insurance', icon: Shield, label: 'Insurance' },
-    { to: '/buyer/support', icon: HelpCircle, label: 'Support' },
-];
-
 export default function Sidebar() {
     const [collapsed, setCollapsed] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -35,6 +16,26 @@ export default function Sidebar() {
     const { t } = useTranslation();
     const location = useLocation();
     const navigate = useNavigate();
+
+    const farmerLinks = [
+        { to: '/farmer', icon: LayoutDashboard, label: t('sidebar.dashboard') },
+        { to: '/farmer/listings', icon: Package, label: t('sidebar.my_listings') },
+        { to: '/farmer/upload', icon: Upload, label: t('sidebar.upload_crop') },
+        { to: '/farmer/orders', icon: ClipboardList, label: t('sidebar.orders') },
+        { to: '/farmer/store', icon: Store, label: t('sidebar.agri_store') },
+        { to: '/farmer/insurance', icon: Shield, label: t('sidebar.insurance') },
+        { to: '/farmer/support', icon: HelpCircle, label: t('sidebar.support') },
+    ];
+
+    const buyerLinks = [
+        { to: '/buyer', icon: LayoutDashboard, label: t('sidebar.dashboard') },
+        { to: '/buyer/marketplace', icon: ShoppingCart, label: t('sidebar.marketplace') },
+        { to: '/buyer/orders', icon: ClipboardList, label: t('sidebar.orders') },
+        { to: '/buyer/store', icon: Store, label: t('sidebar.agri_store') },
+        { to: '/buyer/insurance', icon: Shield, label: t('sidebar.insurance') },
+        { to: '/buyer/support', icon: HelpCircle, label: t('sidebar.support') },
+    ];
+
     const links = user?.role === 'farmer' ? farmerLinks : buyerLinks;
 
     const handleLogout = () => {
@@ -76,7 +77,7 @@ export default function Sidebar() {
                         </div>
                         <div className="min-w-0">
                             <p className="text-sm font-semibold text-gray-800 truncate">{user.name}</p>
-                            <p className="text-xs text-primary-600 capitalize font-medium">{user.role === 'farmer' ? '👨‍🌾 Farmer' : '🏪 Buyer'}</p>
+                            <p className="text-xs text-primary-600 capitalize font-medium">{user.role === 'farmer' ? `👨‍🌾 ${t('sidebar.farmer')}` : `🏪 ${t('sidebar.buyer')}`}</p>
                         </div>
                     </div>
                 </div>
@@ -85,7 +86,7 @@ export default function Sidebar() {
             {/* Navigation Label */}
             {!collapsed && (
                 <div className="px-5 pt-4 pb-1">
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Navigation</p>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('sidebar.navigation')}</p>
                 </div>
             )}
 
@@ -117,7 +118,7 @@ export default function Sidebar() {
                         onClick={() => setMobileOpen(false)}
                     >
                         <Newspaper className="w-5 h-5 flex-shrink-0" />
-                        <span className="text-sm">Krishi Samachar</span>
+                        <span className="text-sm">{t('sidebar.krishi_samachar')}</span>
                     </Link>
                 </div>
             )}
@@ -129,7 +130,7 @@ export default function Sidebar() {
                     className="sidebar-link text-red-500 hover:bg-red-50 hover:text-red-700 w-full"
                 >
                     <LogOut className="w-5 h-5 flex-shrink-0" />
-                    {!collapsed && <span className="text-sm">Logout</span>}
+                    {!collapsed && <span className="text-sm">{t('sidebar.logout')}</span>}
                 </button>
             </div>
         </div>

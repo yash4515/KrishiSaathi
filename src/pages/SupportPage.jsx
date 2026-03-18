@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import { mockSupportTickets, mockFAQs } from '../data/mockData';
 import {
@@ -7,19 +8,28 @@ import {
     Clock, CheckCircle, AlertCircle, Send, Search
 } from 'lucide-react';
 
-const ticketStatusCfg = {
-    open: { cls: 'badge-red', label: 'Open', icon: AlertCircle },
-    in_progress: { cls: 'badge-yellow', label: 'In Progress', icon: Clock },
-    resolved: { cls: 'badge-green', label: 'Resolved', icon: CheckCircle },
-};
-
-const categories = ['Payment', 'Technical', 'Orders', 'Insurance', 'Account', 'Other'];
-
 export default function SupportPage() {
+    const { t } = useTranslation();
+
+    const ticketStatusCfg = {
+        open: { cls: 'badge-red', label: t('support_page.open'), icon: AlertCircle },
+        in_progress: { cls: 'badge-yellow', label: t('support_page.in_progress'), icon: Clock },
+        resolved: { cls: 'badge-green', label: t('support_page.resolved'), icon: CheckCircle },
+    };
+
+    const categories = [
+        t('support_page.cat_payment'),
+        t('support_page.cat_technical'),
+        t('support_page.cat_orders'),
+        t('support_page.cat_insurance'),
+        t('support_page.cat_account'),
+        t('support_page.cat_other')
+    ];
+
     const [activeTab, setActiveTab] = useState('tickets');
     const [showNewTicket, setShowNewTicket] = useState(false);
     const [expandedFaq, setExpandedFaq] = useState(null);
-    const [ticketForm, setTicketForm] = useState({ subject: '', category: 'Payment', priority: 'Medium', description: '' });
+    const [ticketForm, setTicketForm] = useState({ subject: '', category: categories[0], priority: t('support_page.priority_medium'), description: '' });
     const [submitted, setSubmitted] = useState(false);
 
     const handleSubmitTicket = (e) => {
@@ -28,7 +38,7 @@ export default function SupportPage() {
         setTimeout(() => {
             setSubmitted(false);
             setShowNewTicket(false);
-            setTicketForm({ subject: '', category: 'Payment', priority: 'Medium', description: '' });
+            setTicketForm({ subject: '', category: categories[0], priority: t('support_page.priority_medium'), description: '' });
         }, 2000);
     };
 
@@ -38,21 +48,21 @@ export default function SupportPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
                     <h1 className="page-title flex items-center gap-2">
-                        <HelpCircle className="w-7 h-7 text-primary-600" /> Support
+                        <HelpCircle className="w-7 h-7 text-primary-600" /> {t('support_page.title')}
                     </h1>
-                    <p className="page-subtitle">Get help, raise tickets, and find answers to common questions.</p>
+                    <p className="page-subtitle">{t('support_page.subtitle')}</p>
                 </div>
                 <button onClick={() => setShowNewTicket(true)}
                     className="btn-primary flex items-center gap-2 text-sm w-fit">
-                    <Plus className="w-4 h-4" /> Raise Ticket
+                    <Plus className="w-4 h-4" /> {t('support_page.raise_ticket')}
                 </button>
             </div>
 
             {/* Tabs */}
             <div className="flex gap-2 mb-6">
                 {[
-                    { id: 'tickets', label: 'My Tickets', icon: MessageCircle },
-                    { id: 'faqs', label: 'FAQs', icon: HelpCircle },
+                    { id: 'tickets', label: t('support_page.my_tickets'), icon: MessageCircle },
+                    { id: 'faqs', label: t('support_page.faqs'), icon: HelpCircle },
                 ].map(tab => (
                     <button key={tab.id} onClick={() => setActiveTab(tab.id)}
                         className={activeTab === tab.id ? 'filter-chip-active' : 'filter-chip'}>
@@ -78,9 +88,9 @@ export default function SupportPage() {
                                             <span className={`badge ${ticket.priority === 'High' ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600'}`}>{ticket.priority}</span>
                                         </div>
                                         <p className="font-semibold text-gray-900">{ticket.subject}</p>
-                                        <p className="text-xs text-gray-500 mt-1">Category: {ticket.category} • Created: {ticket.createdAt} • Updated: {ticket.lastUpdated}</p>
+                                        <p className="text-xs text-gray-500 mt-1">{t('support_page.category_label')}: {ticket.category} • {t('support_page.created_label')}: {ticket.createdAt} • {t('support_page.updated_label')}: {ticket.lastUpdated}</p>
                                     </div>
-                                    <button className="btn-ghost text-sm border border-gray-200">View Details</button>
+                                    <button className="btn-ghost text-sm border border-gray-200">{t('support_page.view_details')}</button>
                                 </div>
                             </motion.div>
                         );
@@ -88,8 +98,8 @@ export default function SupportPage() {
                     {mockSupportTickets.length === 0 && (
                         <div className="text-center py-16">
                             <p className="text-5xl mb-4">🎫</p>
-                            <p className="text-lg font-semibold text-gray-700">No tickets yet</p>
-                            <p className="text-gray-500 text-sm">Click "Raise Ticket" to get help.</p>
+                            <p className="text-lg font-semibold text-gray-700">{t('support_page.no_tickets')}</p>
+                            <p className="text-gray-500 text-sm">{t('support_page.no_tickets_hint')}</p>
                         </div>
                     )}
                 </div>
@@ -132,46 +142,46 @@ export default function SupportPage() {
                         {submitted ? (
                             <div className="text-center py-8">
                                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-5xl mb-4">✅</motion.div>
-                                <h3 className="text-lg font-bold text-gray-900 mb-2">Ticket Submitted!</h3>
-                                <p className="text-sm text-gray-500">We'll get back to you within 24 hours.</p>
+                                <h3 className="text-lg font-bold text-gray-900 mb-2">{t('support_page.ticket_submitted')}</h3>
+                                <p className="text-sm text-gray-500">{t('support_page.ticket_response')}</p>
                             </div>
                         ) : (
                             <>
                                 <div className="flex items-center justify-between mb-5">
-                                    <h3 className="text-lg font-bold text-gray-900">Raise a Ticket</h3>
+                                    <h3 className="text-lg font-bold text-gray-900">{t('support_page.raise_ticket_title')}</h3>
                                     <button onClick={() => setShowNewTicket(false)} className="p-1.5 hover:bg-gray-100 rounded-lg">
                                         <span className="text-gray-400 text-xl">&times;</span>
                                     </button>
                                 </div>
                                 <form onSubmit={handleSubmitTicket} className="space-y-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1.5">Subject *</label>
-                                        <input type="text" className="input-field" placeholder="Brief description of your issue"
+                                        <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('support_page.subject')} *</label>
+                                        <input type="text" className="input-field" placeholder={t('support_page.subject_placeholder')}
                                             value={ticketForm.subject} onChange={e => setTicketForm({ ...ticketForm, subject: e.target.value })} required />
                                     </div>
                                     <div className="grid grid-cols-2 gap-3">
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('support_page.category')}</label>
                                             <select className="input-field" value={ticketForm.category}
                                                 onChange={e => setTicketForm({ ...ticketForm, category: e.target.value })}>
                                                 {categories.map(c => <option key={c}>{c}</option>)}
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Priority</label>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('support_page.priority')}</label>
                                             <select className="input-field" value={ticketForm.priority}
                                                 onChange={e => setTicketForm({ ...ticketForm, priority: e.target.value })}>
-                                                {['Low', 'Medium', 'High'].map(p => <option key={p}>{p}</option>)}
+                                                {[t('support_page.priority_low'), t('support_page.priority_medium'), t('support_page.priority_high')].map(p => <option key={p}>{p}</option>)}
                                             </select>
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1.5">Description *</label>
-                                        <textarea className="input-field h-24 resize-none" placeholder="Describe your issue in detail..."
+                                        <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('support_page.description')} *</label>
+                                        <textarea className="input-field h-24 resize-none" placeholder={t('support_page.desc_placeholder')}
                                             value={ticketForm.description} onChange={e => setTicketForm({ ...ticketForm, description: e.target.value })} required />
                                     </div>
                                     <button type="submit" className="btn-primary w-full flex items-center justify-center gap-2">
-                                        <Send className="w-4 h-4" /> Submit Ticket
+                                        <Send className="w-4 h-4" /> {t('support_page.submit_ticket')}
                                     </button>
                                 </form>
                             </>
@@ -182,6 +192,3 @@ export default function SupportPage() {
         </DashboardLayout>
     );
 }
-
-
-

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import { useAuth } from '../hooks/useAuth';
 import { mockCrops, mockOrders, mockWeather } from '../data/mockData';
@@ -10,38 +11,39 @@ import {
 import { Link } from 'react-router-dom';
 import { cropAPI } from '../services/api';
 
-const statCards = [
-    { label: 'Total Earnings', value: '₹2,45,000', change: '+12%', icon: DollarSign, color: 'text-green-600', bg: 'bg-green-100' },
-    { label: 'Active Listings', value: '8', change: '+2', icon: Package, color: 'text-blue-600', bg: 'bg-blue-100' },
-    { label: 'Total Orders', value: '24', change: '+5', icon: ShoppingCart, color: 'text-purple-600', bg: 'bg-purple-100' },
-    { label: 'Market Rank', value: 'Top 15%', change: '↑3', icon: TrendingUp, color: 'text-orange-600', bg: 'bg-orange-100' },
-];
-
-const earningsData = [
-    { label: 'This Week', amount: '₹45,200', pct: 75 },
-    { label: 'This Month', amount: '₹1,82,000', pct: 60 },
-    { label: 'Last Month', amount: '₹2,10,000', pct: 85 },
-];
-
-const cropPerformance = [
-    { name: 'Wheat', revenue: 85000, pct: 85, color: 'bg-green-500' },
-    { name: 'Rice', revenue: 62000, pct: 62, color: 'bg-blue-500' },
-    { name: 'Tomatoes', revenue: 45000, pct: 45, color: 'bg-red-400' },
-    { name: 'Cotton', revenue: 38000, pct: 38, color: 'bg-yellow-500' },
-    { name: 'Mangoes', revenue: 28000, pct: 28, color: 'bg-orange-400' },
-];
-
-const statusCfg = {
-    confirmed: { icon: CheckCircle, cls: 'text-green-600 bg-green-50', label: 'Confirmed' },
-    pending: { icon: Clock, cls: 'text-yellow-600 bg-yellow-50', label: 'Pending' },
-    shipped: { icon: Truck, cls: 'text-blue-600 bg-blue-50', label: 'Shipped' },
-    delivered: { icon: FileCheck, cls: 'text-purple-600 bg-purple-50', label: 'Delivered' },
-};
-
 export default function FarmerDashboard() {
     const { user } = useAuth();
+    const { t } = useTranslation();
     const recentOrders = mockOrders.slice(0, 3);
-    const [activeListingsCount, setActiveListingsCount] = useState(8); // Mock default
+    const [activeListingsCount, setActiveListingsCount] = useState(8);
+
+    const statCards = [
+        { label: t('farmer_dashboard.total_earnings'), value: '₹2,45,000', change: '+12%', icon: DollarSign, color: 'text-green-600', bg: 'bg-green-100' },
+        { label: t('farmer_dashboard.active_listings'), value: '8', change: '+2', icon: Package, color: 'text-blue-600', bg: 'bg-blue-100' },
+        { label: t('farmer_dashboard.total_orders'), value: '24', change: '+5', icon: ShoppingCart, color: 'text-purple-600', bg: 'bg-purple-100' },
+        { label: t('farmer_dashboard.market_rank'), value: 'Top 15%', change: '↑3', icon: TrendingUp, color: 'text-orange-600', bg: 'bg-orange-100' },
+    ];
+
+    const earningsData = [
+        { label: t('farmer_dashboard.this_week'), amount: '₹45,200', pct: 75 },
+        { label: t('farmer_dashboard.this_month'), amount: '₹1,82,000', pct: 60 },
+        { label: t('farmer_dashboard.last_month'), amount: '₹2,10,000', pct: 85 },
+    ];
+
+    const statusCfg = {
+        confirmed: { icon: CheckCircle, cls: 'text-green-600 bg-green-50', label: t('farmer_dashboard.confirmed') },
+        pending: { icon: Clock, cls: 'text-yellow-600 bg-yellow-50', label: t('farmer_dashboard.pending') },
+        shipped: { icon: Truck, cls: 'text-blue-600 bg-blue-50', label: t('farmer_dashboard.shipped') },
+        delivered: { icon: FileCheck, cls: 'text-purple-600 bg-purple-50', label: t('farmer_dashboard.delivered') },
+    };
+
+    const cropPerformance = [
+        { name: t('mock.Organic Wheat', { defaultValue: 'Wheat' }), revenue: 85000, pct: 85, color: 'bg-green-500' },
+        { name: t('mock.Basmati Rice', { defaultValue: 'Rice' }), revenue: 62000, pct: 62, color: 'bg-blue-500' },
+        { name: t('mock.Fresh Tomatoes', { defaultValue: 'Tomatoes' }), revenue: 45000, pct: 45, color: 'bg-red-400' },
+        { name: t('mock.Cotton', { defaultValue: 'Cotton' }), revenue: 38000, pct: 38, color: 'bg-yellow-500' },
+        { name: t('mock.Alphonso Mango', { defaultValue: 'Mangoes' }), revenue: 28000, pct: 28, color: 'bg-orange-400' },
+    ];
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -49,8 +51,7 @@ export default function FarmerDashboard() {
                 const res = await cropAPI.myListings();
                 if (res.data?.success && res.data.data.listings) {
                     const activeCount = res.data.data.listings.filter(l => l.status === 'active').length;
-                    setActiveListingsCount(activeCount || 8); // Keep 8 if 0 just for visual mock fallback if desired, wait no, let's show real count!
-                    // Let's show real count if fetch works. If it's a new farmer 0 is correct.
+                    setActiveListingsCount(activeCount || 8);
                     if (res.data.data.listings.length > 0) {
                         setActiveListingsCount(activeCount);
                     }
@@ -62,9 +63,8 @@ export default function FarmerDashboard() {
         fetchStats();
     }, []);
 
-    // Update the stat cards with dynamic active listings count
-    const dynamicStatCards = statCards.map(s => 
-        s.label === 'Active Listings' ? { ...s, value: activeListingsCount.toString() } : s
+    const dynamicStatCards = statCards.map(s =>
+        s.label === t('farmer_dashboard.active_listings') ? { ...s, value: activeListingsCount.toString() } : s
     );
 
     return (
@@ -73,21 +73,21 @@ export default function FarmerDashboard() {
             <div className="mb-8">
                 <motion.h1 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
                     className="page-title">
-                    Welcome back, {user?.name || 'Farmer'} 👋
+                    {t('farmer_dashboard.welcome')} {user?.name || t('auth.role_farmer')} 👋
                 </motion.h1>
-                <p className="page-subtitle">Here's what's happening with your farm today.</p>
+                <p className="page-subtitle">{t('farmer_dashboard.subtitle')}</p>
             </div>
 
             {/* Quick Actions */}
             <div className="flex gap-3 mb-6 overflow-x-auto pb-1">
                 <Link to="/farmer/upload" className="btn-primary !py-2.5 !px-5 text-sm flex items-center gap-2 whitespace-nowrap">
-                    <Package className="w-4 h-4" /> Upload Crop
+                    <Package className="w-4 h-4" /> {t('farmer_dashboard.upload_crop')}
                 </Link>
                 <Link to="/farmer/listings" className="btn-secondary !py-2.5 !px-5 text-sm flex items-center gap-2 whitespace-nowrap">
-                    View Listings
+                    {t('farmer_dashboard.view_listings')}
                 </Link>
                 <Link to="/farmer/orders" className="btn-ghost !py-2.5 !px-5 text-sm flex items-center gap-2 whitespace-nowrap border border-gray-200">
-                    View Orders
+                    {t('farmer_dashboard.view_orders')}
                 </Link>
             </div>
 
@@ -115,7 +115,7 @@ export default function FarmerDashboard() {
                     className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white">
                     <div className="flex items-center justify-between mb-4">
                         <div>
-                            <h3 className="font-semibold text-lg flex items-center gap-2"><Cloud className="w-5 h-5" /> Weather</h3>
+                            <h3 className="font-semibold text-lg flex items-center gap-2"><Cloud className="w-5 h-5" /> {t('farmer_dashboard.weather')}</h3>
                             <p className="text-blue-100 text-sm">{mockWeather.location}</p>
                         </div>
                         <div className="text-right">
@@ -141,7 +141,7 @@ export default function FarmerDashboard() {
                 {/* Earnings */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
                     className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
-                    <h3 className="font-semibold text-lg text-gray-900 mb-4">Earnings Overview</h3>
+                    <h3 className="font-semibold text-lg text-gray-900 mb-4">{t('farmer_dashboard.earnings_overview')}</h3>
                     <div className="space-y-4">
                         {earningsData.map(e => (
                             <div key={e.label}>
@@ -158,7 +158,7 @@ export default function FarmerDashboard() {
                         ))}
                     </div>
                     <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-                        <span className="text-sm text-gray-500">Total Earnings</span>
+                        <span className="text-sm text-gray-500">{t('farmer_dashboard.total_earnings')}</span>
                         <span className="text-xl font-bold text-primary-700">₹2,45,000</span>
                     </div>
                 </motion.div>
@@ -167,7 +167,7 @@ export default function FarmerDashboard() {
             {/* Crop Performance */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
                 className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 mb-8">
-                <h3 className="font-semibold text-lg text-gray-900 mb-4">Crop Performance</h3>
+                <h3 className="font-semibold text-lg text-gray-900 mb-4">{t('farmer_dashboard.crop_performance')}</h3>
                 <div className="space-y-3">
                     {cropPerformance.map(c => (
                         <div key={c.name} className="flex items-center gap-4">
@@ -190,16 +190,16 @@ export default function FarmerDashboard() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
                 className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
                 <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-                    <h3 className="font-semibold text-lg text-gray-900">Recent Orders</h3>
+                    <h3 className="font-semibold text-lg text-gray-900">{t('farmer_dashboard.recent_orders')}</h3>
                     <Link to="/farmer/orders" className="text-sm text-primary-600 font-medium hover:text-primary-700 flex items-center gap-1">
-                        View All <ArrowRight className="w-4 h-4" />
+                        {t('farmer_dashboard.view_all')} <ArrowRight className="w-4 h-4" />
                     </Link>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead className="bg-gray-50">
                             <tr>
-                                {['Crop', 'Buyer', 'Qty', 'Price', 'Status', 'Date'].map(h => (
+                                {[t('farmer_dashboard.crop'), t('farmer_dashboard.buyer'), t('farmer_dashboard.qty'), t('farmer_dashboard.price'), t('farmer_dashboard.status'), t('farmer_dashboard.date')].map(h => (
                                     <th key={h} className="text-left text-xs font-semibold text-gray-500 uppercase px-6 py-3">{h}</th>
                                 ))}
                             </tr>
@@ -209,7 +209,7 @@ export default function FarmerDashboard() {
                                 const s = statusCfg[o.status];
                                 return (
                                     <tr key={o.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="px-6 py-4 text-sm font-medium text-gray-900">{o.crop}</td>
+                                        <td className="px-6 py-4 text-sm font-medium text-gray-900">{t(`mock.${o.crop}`, { defaultValue: o.crop })}</td>
                                         <td className="px-6 py-4 text-sm text-gray-600">{o.buyer}</td>
                                         <td className="px-6 py-4 text-sm text-gray-600">{o.quantity}</td>
                                         <td className="px-6 py-4 text-sm font-semibold text-gray-800">{o.price}</td>

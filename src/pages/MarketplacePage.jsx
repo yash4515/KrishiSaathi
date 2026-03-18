@@ -6,18 +6,21 @@ import Footer from '../components/layout/Footer';
 import { useTranslation } from 'react-i18next';
 import { Search, SlidersHorizontal, MapPin, Star, ShoppingCart, X } from 'lucide-react';
 
-const categories = ['All', 'Grains', 'Vegetables', 'Fruits', 'Pulses', 'Spices', 'Cash Crops'];
-
 export default function MarketplacePage() {
     const { t } = useTranslation();
+    const categories = [t('common.all'), t('common.grains'), t('common.vegetables'), t('common.fruits'), t('common.pulses'), t('common.spices'), t('common.cash_crops')];
+
     const [search, setSearch] = useState('');
-    const [category, setCategory] = useState('All');
+    const [category, setCategory] = useState(categories[0]);
     const [showBid, setShowBid] = useState(null);
     const [bidAmount, setBidAmount] = useState('');
 
     const filtered = mockCrops.filter(c => {
-        const matchSearch = c.name.toLowerCase().includes(search.toLowerCase()) || c.location.toLowerCase().includes(search.toLowerCase());
-        const matchCat = category === 'All' || c.category === category.toLowerCase().replace(' ', '_');
+        const cropName = t(`mock.${c.name}`, { defaultValue: c.name });
+        const cropLocation = t(`mock.${c.location}`, { defaultValue: c.location });
+        const matchSearch = cropName.toLowerCase().includes(search.toLowerCase()) || cropLocation.toLowerCase().includes(search.toLowerCase());
+        const allLabel = t('common.all');
+        const matchCat = category === allLabel || c.category === category.toLowerCase().replace(' ', '_');
         return matchSearch && matchCat;
     });
 
@@ -26,15 +29,15 @@ export default function MarketplacePage() {
             <Navbar />
             <div className="pt-20 pb-16 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
                 <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">🌾 Crop Marketplace</h1>
-                    <p className="text-gray-500 mb-6">Browse and bid on fresh crops directly from farmers.</p>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">🌾 {t('marketplace_page.crop_marketplace')}</h1>
+                    <p className="text-gray-500 mb-6">{t('marketplace_page.subtitle')}</p>
                 </motion.div>
 
                 {/* Search & Filter */}
                 <div className="flex flex-col md:flex-row gap-4 mb-8">
                     <div className="relative flex-1">
                         <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input type="text" className="input-field pl-11" placeholder="Search by crop name or location..." value={search} onChange={e => setSearch(e.target.value)} />
+                        <input type="text" className="input-field pl-11" placeholder={t('marketplace_page.search_placeholder')} value={search} onChange={e => setSearch(e.target.value)} />
                     </div>
                     <div className="flex gap-2 overflow-x-auto pb-2">
                         {categories.map(c => (
@@ -51,18 +54,18 @@ export default function MarketplacePage() {
                         <motion.div key={c.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-all group">
                             <div className="h-48 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center overflow-hidden">
                                 {c.image.startsWith('/') ? (
-                                    <img src={c.image} alt={c.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                    <img src={c.image} alt={t(`mock.${c.name}`, { defaultValue: c.name })} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                 ) : (
                                     <span className="text-5xl group-hover:scale-105 transition-transform duration-500">{c.image}</span>
                                 )}
                             </div>
                             <div className="p-4">
                                 <div className="flex items-start justify-between">
-                                    <h3 className="font-semibold text-gray-900">{c.name}</h3>
-                                    <span className="badge-green text-xs">{c.bids} bids</span>
+                                    <h3 className="font-semibold text-gray-900">{t(`mock.${c.name}`, { defaultValue: c.name })}</h3>
+                                    <span className="badge-green text-xs">{c.bids} {t('marketplace_page.bids')}</span>
                                 </div>
-                                <p className="text-xs text-gray-500 flex items-center gap-1 mt-1"><MapPin className="w-3 h-3" /> {c.location}</p>
-                                <p className="text-sm text-gray-600 mt-1">Qty: {c.quantity}</p>
+                                <p className="text-xs text-gray-500 flex items-center gap-1 mt-1"><MapPin className="w-3 h-3" /> {t(`mock.${c.location}`, { defaultValue: c.location })}</p>
+                                <p className="text-sm text-gray-600 mt-1">{t('farmer_dashboard.qty')}: {c.quantity}</p>
                                 <p className="text-sm font-bold text-primary-700 mt-1">{c.priceRange}</p>
                                 <div className="flex items-center justify-between mt-2">
                                     <div className="flex items-center gap-1">
@@ -81,8 +84,8 @@ export default function MarketplacePage() {
                 {filtered.length === 0 && (
                     <div className="text-center py-20">
                         <p className="text-5xl mb-4">🔍</p>
-                        <p className="text-xl font-semibold text-gray-700">No crops found</p>
-                        <p className="text-gray-500">Try a different search or category.</p>
+                        <p className="text-xl font-semibold text-gray-700">{t('marketplace_page.no_crops')}</p>
+                        <p className="text-gray-500">{t('marketplace_page.no_crops_hint')}</p>
                     </div>
                 )}
             </div>
@@ -98,20 +101,20 @@ export default function MarketplacePage() {
                         <div className="flex items-center gap-3 mb-4 p-3 bg-gray-50 rounded-xl">
                             <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-primary-100 flex items-center justify-center text-3xl">
                                 {showBid.image.startsWith('/') ? (
-                                    <img src={showBid.image} alt={showBid.name} className="w-full h-full object-cover" />
+                                    <img src={showBid.image} alt={t(`mock.${showBid.name}`, { defaultValue: showBid.name })} className="w-full h-full object-cover" />
                                 ) : (
                                     <span>{showBid.image}</span>
                                 )}
                             </div>
                             <div>
-                                <p className="font-semibold text-gray-900">{showBid.name}</p>
-                                <p className="text-sm text-gray-500">{showBid.quantity} • {showBid.location}</p>
+                                <p className="font-semibold text-gray-900">{t(`mock.${showBid.name}`, { defaultValue: showBid.name })}</p>
+                                <p className="text-sm text-gray-500">{showBid.quantity} • {t(`mock.${showBid.location}`, { defaultValue: showBid.location })}</p>
                                 <p className="text-sm font-semibold text-primary-700">{showBid.priceRange}</p>
                             </div>
                         </div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">Your Bid (₹ per quintal)</label>
-                        <input type="number" className="input-field mb-4" placeholder="Enter bid amount" value={bidAmount} onChange={e => setBidAmount(e.target.value)} />
-                        <button onClick={() => setShowBid(null)} className="btn-primary w-full">{t('buttons.submit')}</button>
+                        <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('marketplace_page.your_bid_per_qt')}</label>
+                        <input type="number" className="input-field mb-4" placeholder={t('marketplace_page.enter_bid')} value={bidAmount} onChange={e => setBidAmount(e.target.value)} />
+                        <button onClick={() => setShowBid(null)} className="btn-primary w-full">{t('marketplace_page.submit_bid')}</button>
                     </motion.div>
                 </div>
             )}

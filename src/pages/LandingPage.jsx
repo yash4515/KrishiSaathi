@@ -22,32 +22,33 @@ const stagger = {
     viewport: { once: true },
 };
 
-const features = [
-    { icon: TrendingUp, title: 'Price Discovery', desc: 'Get real-time market prices and analytics for informed selling decisions.', color: 'bg-green-100 text-green-600' },
-    { icon: Users, title: 'Direct Buyer Connect', desc: 'Connect with verified buyers directly, eliminating middlemen.', color: 'bg-blue-100 text-blue-600' },
-    { icon: ShoppingCart, title: 'Agri Marketplace', desc: 'Buy and sell crops, seeds, fertilizers in one platform.', color: 'bg-purple-100 text-purple-600' },
-    { icon: CloudSun, title: 'Weather Insights', desc: 'Accurate weather forecasts to plan your farming activities.', color: 'bg-orange-100 text-orange-600' },
-    { icon: Shield, title: 'Crop Insurance', desc: 'Easy access to government and private crop insurance schemes.', color: 'bg-red-100 text-red-600' },
-    { icon: MessageCircle, title: '24/7 Support', desc: 'Expert helpline and chat support for farming queries.', color: 'bg-teal-100 text-teal-600' },
-];
-
-const steps = [
-    { num: '01', title: 'Register Free', desc: 'Create your account as a farmer or buyer in 2 minutes.', icon: '👤' },
-    { num: '02', title: 'List or Browse', desc: 'Farmers list crops. Buyers browse the marketplace.', icon: '📋' },
-    { num: '03', title: 'Connect & Trade', desc: 'Negotiate, bid, and trade directly with transparency.', icon: '🤝' },
-];
-
-const benefits = [
-    'No middlemen — direct market access',
-    'Better prices through competitive bidding',
-    'Weather-aware farming decisions',
-    'Access to verified insurance schemes',
-    'Free agri-expert support 24/7',
-    'Secure digital payments',
-];
-
 export default function LandingPage() {
     const { t } = useTranslation();
+
+    const features = [
+        { icon: TrendingUp, title: t('landing.feature_price_discovery'), desc: t('landing.feature_price_desc'), color: 'bg-green-100 text-green-600' },
+        { icon: Users, title: t('landing.feature_buyer_connect'), desc: t('landing.feature_buyer_desc'), color: 'bg-blue-100 text-blue-600' },
+        { icon: ShoppingCart, title: t('landing.feature_marketplace'), desc: t('landing.feature_marketplace_desc'), color: 'bg-purple-100 text-purple-600' },
+        { icon: CloudSun, title: t('landing.feature_weather'), desc: t('landing.feature_weather_desc'), color: 'bg-orange-100 text-orange-600' },
+        { icon: Shield, title: t('landing.feature_insurance'), desc: t('landing.feature_insurance_desc'), color: 'bg-red-100 text-red-600' },
+        { icon: MessageCircle, title: t('landing.feature_support'), desc: t('landing.feature_support_desc'), color: 'bg-teal-100 text-teal-600' },
+    ];
+
+    const steps = [
+        { num: '01', title: t('landing.step_1_title'), desc: t('landing.step_1_desc'), icon: '👤' },
+        { num: '02', title: t('landing.step_2_title'), desc: t('landing.step_2_desc'), icon: '📋' },
+        { num: '03', title: t('landing.step_3_title'), desc: t('landing.step_3_desc'), icon: '🤝' },
+    ];
+
+    const benefits = [
+        t('landing.benefit_1'),
+        t('landing.benefit_2'),
+        t('landing.benefit_3'),
+        t('landing.benefit_4'),
+        t('landing.benefit_5'),
+        t('landing.benefit_6'),
+    ];
+
     return (
         <div className="bg-white">
             <Navbar />
@@ -83,17 +84,17 @@ export default function LandingPage() {
                             {/* Role-based CTAs */}
                             <div className="flex flex-col sm:flex-row gap-4 mb-6">
                                 <Link to="/login" className="group bg-white text-primary-700 font-bold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 text-lg">
-                                    <span className="text-2xl">👨‍🌾</span> Login as Farmer <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                    <span className="text-2xl">👨‍🌾</span> {t('landing.login_farmer')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                                 <Link to="/login" className="group bg-white/15 backdrop-blur-sm border-2 border-white/40 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 hover:bg-white/25 active:scale-[0.98] flex items-center justify-center gap-3 text-lg">
-                                    <span className="text-2xl">🏪</span> Login as Buyer <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                    <span className="text-2xl">🏪</span> {t('landing.login_buyer')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                             </div>
 
                             <p className="text-sm text-gray-300">
-                                New here?{' '}
+                                {t('landing.new_here')}{' '}
                                 <Link to="/signup" className="text-green-300 font-semibold hover:text-green-200 underline underline-offset-2">
-                                    Create a free account →
+                                    {t('landing.create_free_account')}
                                 </Link>
                             </p>
 
@@ -134,7 +135,7 @@ export default function LandingPage() {
                                         <TrendingUp className="w-5 h-5 text-green-600" />
                                     </div>
                                     <div>
-                                        <p className="text-xs text-gray-500">Today's Price</p>
+                                        <p className="text-xs text-gray-500">{t('landing.todays_price')}</p>
                                         <p className="text-sm font-bold text-gray-800">₹2,450/qt ↑</p>
                                     </div>
                                 </motion.div>
@@ -147,7 +148,7 @@ export default function LandingPage() {
                                         <Star className="w-5 h-5 text-yellow-600" />
                                     </div>
                                     <div>
-                                        <p className="text-xs text-gray-500">Farmer Rating</p>
+                                        <p className="text-xs text-gray-500">{t('landing.farmer_rating')}</p>
                                         <p className="text-sm font-bold text-gray-800">4.8 ★★★★★</p>
                                     </div>
                                 </motion.div>
@@ -161,24 +162,24 @@ export default function LandingPage() {
             <section className="section-padding bg-gradient-to-b from-white to-primary-50/30">
                 <div className="max-w-7xl mx-auto">
                     <motion.div {...fadeUp} className="text-center mb-12">
-                        <span className="text-sm font-semibold text-primary-600 uppercase tracking-wider">Join As</span>
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-4">Choose Your Role</h2>
-                        <p className="text-gray-600 max-w-xl mx-auto">Whether you grow crops or purchase them, KrishiSaathi has the right tools for you.</p>
+                        <span className="text-sm font-semibold text-primary-600 uppercase tracking-wider">{t('landing.join_as')}</span>
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-4">{t('landing.choose_role')}</h2>
+                        <p className="text-gray-600 max-w-xl mx-auto">{t('landing.choose_role_desc')}</p>
                     </motion.div>
 
                     <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                         <motion.div {...stagger} transition={{ delay: 0.1 }}>
                             <Link to="/signup" className="block group p-8 bg-white rounded-3xl border-2 border-gray-100 hover:border-primary-400 hover:shadow-2xl transition-all duration-300">
                                 <div className="text-6xl mb-4">👨‍🌾</div>
-                                <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary-700 transition-colors">I'm a Farmer</h3>
-                                <p className="text-gray-600 mb-4">List your crops, get fair prices, access insurance & weather insights.</p>
+                                <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary-700 transition-colors">{t('landing.im_farmer')}</h3>
+                                <p className="text-gray-600 mb-4">{t('landing.farmer_desc')}</p>
                                 <ul className="space-y-2 text-sm text-gray-600">
-                                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary-500" /> Upload & manage crop listings</li>
-                                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary-500" /> Track orders & earnings</li>
-                                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary-500" /> Access crop insurance</li>
+                                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary-500" /> {t('landing.farmer_feat_1')}</li>
+                                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary-500" /> {t('landing.farmer_feat_2')}</li>
+                                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary-500" /> {t('landing.farmer_feat_3')}</li>
                                 </ul>
                                 <div className="mt-6 flex items-center text-primary-600 font-semibold group-hover:gap-3 transition-all gap-2">
-                                    Get Started <ArrowRight className="w-5 h-5" />
+                                    {t('buttons.get_started')} <ArrowRight className="w-5 h-5" />
                                 </div>
                             </Link>
                         </motion.div>
@@ -186,15 +187,15 @@ export default function LandingPage() {
                         <motion.div {...stagger} transition={{ delay: 0.2 }}>
                             <Link to="/signup" className="block group p-8 bg-white rounded-3xl border-2 border-gray-100 hover:border-blue-400 hover:shadow-2xl transition-all duration-300">
                                 <div className="text-6xl mb-4">🏪</div>
-                                <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">I'm a Buyer</h3>
-                                <p className="text-gray-600 mb-4">Browse fresh crops, place bids, and get doorstep delivery.</p>
+                                <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">{t('landing.im_buyer')}</h3>
+                                <p className="text-gray-600 mb-4">{t('landing.buyer_desc')}</p>
                                 <ul className="space-y-2 text-sm text-gray-600">
-                                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-blue-500" /> Browse verified crop listings</li>
-                                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-blue-500" /> Place bids & track orders</li>
-                                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-blue-500" /> Direct farmer contact</li>
+                                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-blue-500" /> {t('landing.buyer_feat_1')}</li>
+                                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-blue-500" /> {t('landing.buyer_feat_2')}</li>
+                                    <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-blue-500" /> {t('landing.buyer_feat_3')}</li>
                                 </ul>
                                 <div className="mt-6 flex items-center text-blue-600 font-semibold group-hover:gap-3 transition-all gap-2">
-                                    Get Started <ArrowRight className="w-5 h-5" />
+                                    {t('buttons.get_started')} <ArrowRight className="w-5 h-5" />
                                 </div>
                             </Link>
                         </motion.div>
@@ -214,7 +215,7 @@ export default function LandingPage() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {features.map((f, i) => (
                             <motion.div
-                                key={f.title}
+                                key={i}
                                 {...stagger}
                                 transition={{ delay: i * 0.1, duration: 0.5 }}
                                 className="group p-6 rounded-2xl border border-gray-100 hover:shadow-xl hover:border-primary-100 transition-all duration-300"
@@ -234,7 +235,7 @@ export default function LandingPage() {
             <section className="section-padding bg-primary-50/50">
                 <div className="max-w-7xl mx-auto">
                     <motion.div {...fadeUp} className="text-center mb-16">
-                        <span className="text-sm font-semibold text-primary-600 uppercase tracking-wider">How It Works</span>
+                        <span className="text-sm font-semibold text-primary-600 uppercase tracking-wider">{t('landing.how_it_works_label')}</span>
                         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-4">{t('landing.how_it_works')}</h2>
                     </motion.div>
 
@@ -264,7 +265,7 @@ export default function LandingPage() {
                 <div className="max-w-7xl mx-auto">
                     <div className="grid lg:grid-cols-2 gap-16 items-center">
                         <motion.div {...fadeUp}>
-                            <span className="text-sm font-semibold text-primary-600 uppercase tracking-wider">Benefits</span>
+                            <span className="text-sm font-semibold text-primary-600 uppercase tracking-wider">{t('landing.benefits_label')}</span>
                             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2 mb-8">
                                 {t('landing.benefits_title')}
                             </h2>
@@ -291,10 +292,10 @@ export default function LandingPage() {
                             className="grid grid-cols-2 gap-4"
                         >
                             {[
-                                { icon: Zap, val: '30%', label: 'Higher Income' },
-                                { icon: Globe, val: '200+', label: 'Mandis Connected' },
-                                { icon: BarChart3, val: '₹100Cr', label: 'Trade Volume' },
-                                { icon: Leaf, val: '15K+', label: 'Organic Listings' },
+                                { icon: Zap, val: '30%', label: t('landing.higher_income') },
+                                { icon: Globe, val: '200+', label: t('landing.mandis_connected') },
+                                { icon: BarChart3, val: '₹100Cr', label: t('landing.trade_volume') },
+                                { icon: Leaf, val: '15K+', label: t('landing.organic_listings') },
                             ].map((s, i) => (
                                 <div key={i} className="bg-primary-50 rounded-2xl p-6 text-center hover:bg-primary-100 transition-colors">
                                     <s.icon className="w-8 h-8 text-primary-600 mx-auto mb-2" />
@@ -312,9 +313,9 @@ export default function LandingPage() {
                 <div className="max-w-7xl mx-auto">
                     <motion.div {...fadeUp} className="text-center">
                         <Smartphone className="w-16 h-16 mx-auto mb-6 opacity-80" />
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">Download KrishiSaathi App</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('landing.download_app')}</h2>
                         <p className="text-primary-100 max-w-xl mx-auto mb-8 text-lg">
-                            Get the full experience on your mobile. Available on Android & iOS.
+                            {t('landing.download_desc')}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <button className="bg-white text-primary-700 font-semibold py-3 px-8 rounded-xl hover:bg-primary-50 transition-colors flex items-center justify-center gap-2">

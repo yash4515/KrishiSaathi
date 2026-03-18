@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import { Upload, Plus, X, MapPin, Image, FileText } from 'lucide-react';
 import { cropAPI } from '../services/api';
 
 export default function FarmerUploadCrop() {
+    const { t } = useTranslation();
     const [form, setForm] = useState({
         name: '', quantity: '', pricePerKg: '', location: '', description: '', category: 'grains'
     });
@@ -46,7 +48,7 @@ export default function FarmerUploadCrop() {
             });
 
             await cropAPI.add(formData);
-            
+
             setSuccess(true);
             setTimeout(() => {
                 setSuccess(false);
@@ -55,19 +57,19 @@ export default function FarmerUploadCrop() {
             }, 3000);
         } catch (error) {
             console.error('Error uploading crop:', error);
-            alert('Failed to list crop. Please try again.');
+            alert(t('upload_page.upload_failed'));
         } finally {
             setLoading(false);
         }
     };
 
     const categories = [
-        { value: 'grains', label: '🌾 Grains' },
-        { value: 'vegetables', label: '🥬 Vegetables' },
-        { value: 'fruits', label: '🍎 Fruits' },
-        { value: 'pulses', label: '🫘 Pulses' },
-        { value: 'spices', label: '🌶️ Spices' },
-        { value: 'cash_crops', label: '🌿 Cash Crops' },
+        { value: 'grains', label: `🌾 ${t('upload_page.cat_grains')}` },
+        { value: 'vegetables', label: `🥬 ${t('upload_page.cat_vegetables')}` },
+        { value: 'fruits', label: `🍎 ${t('upload_page.cat_fruits')}` },
+        { value: 'pulses', label: `🫘 ${t('upload_page.cat_pulses')}` },
+        { value: 'spices', label: `🌶️ ${t('upload_page.cat_spices')}` },
+        { value: 'cash_crops', label: `🌿 ${t('upload_page.cat_cash_crops')}` },
     ];
 
     return (
@@ -76,9 +78,9 @@ export default function FarmerUploadCrop() {
                 {/* Header */}
                 <div className="mb-6">
                     <h1 className="page-title flex items-center gap-2">
-                        <Upload className="w-7 h-7 text-primary-600" /> Upload Crop
+                        <Upload className="w-7 h-7 text-primary-600" /> {t('upload_page.title')}
                     </h1>
-                    <p className="page-subtitle">List your crop on the marketplace for buyers to discover.</p>
+                    <p className="page-subtitle">{t('upload_page.subtitle')}</p>
                 </div>
 
                 {/* Success Banner */}
@@ -90,8 +92,8 @@ export default function FarmerUploadCrop() {
                     >
                         <span className="text-2xl">✅</span>
                         <div>
-                            <p className="font-semibold text-green-800">Listing Published!</p>
-                            <p className="text-sm text-green-600">Your crop is now visible to buyers on the marketplace.</p>
+                            <p className="font-semibold text-green-800">{t('upload_page.listing_published')}</p>
+                            <p className="text-sm text-green-600">{t('upload_page.listing_success')}</p>
                         </div>
                     </motion.div>
                 )}
@@ -102,14 +104,14 @@ export default function FarmerUploadCrop() {
                     <form onSubmit={handleSubmit} className="space-y-5">
                         {/* Crop Name */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Crop Name *</label>
-                            <input type="text" className="input-field" placeholder="e.g. Organic Wheat"
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('upload_page.crop_name')} *</label>
+                            <input type="text" className="input-field" placeholder={t('upload_page.crop_placeholder')}
                                 value={form.name} onChange={set('name')} required />
                         </div>
 
                         {/* Category */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('upload_page.category')}</label>
                             <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                                 {categories.map(c => (
                                     <button
@@ -130,38 +132,38 @@ export default function FarmerUploadCrop() {
                         {/* Quantity + Price */}
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">Quantity (kg) *</label>
-                                <input type="number" className="input-field" placeholder="e.g. 500"
+                                <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('upload_page.quantity_kg')} *</label>
+                                <input type="number" className="input-field" placeholder={t('upload_page.quantity_placeholder')}
                                     value={form.quantity} onChange={set('quantity')} required />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">Price per kg (₹) *</label>
-                                <input type="number" className="input-field" placeholder="e.g. 25"
+                                <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('upload_page.price_per_kg')} *</label>
+                                <input type="number" className="input-field" placeholder={t('upload_page.price_placeholder')}
                                     value={form.pricePerKg} onChange={set('pricePerKg')} required />
                             </div>
                         </div>
 
                         {/* Location */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Location *</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('upload_page.location')} *</label>
                             <div className="relative">
                                 <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                                <input type="text" className="input-field pl-10" placeholder="e.g. Indore, MP"
+                                <input type="text" className="input-field pl-10" placeholder={t('upload_page.location_placeholder')}
                                     value={form.location} onChange={set('location')} required />
                             </div>
                         </div>
 
                         {/* Description */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
-                            <textarea className="input-field h-24 resize-none" placeholder="Describe crop quality, grade, harvest date..."
+                            <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('upload_page.description')}</label>
+                            <textarea className="input-field h-24 resize-none" placeholder={t('upload_page.desc_placeholder')}
                                 value={form.description} onChange={set('description')} />
                         </div>
 
                         {/* Image Upload */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                                Upload Images <span className="text-gray-400 font-normal">(max 5)</span>
+                                {t('upload_page.upload_images')} <span className="text-gray-400 font-normal">({t('upload_page.max_images')})</span>
                             </label>
                             {images.length > 0 && (
                                 <div className="flex gap-3 mb-3 overflow-x-auto pb-2">
@@ -183,8 +185,8 @@ export default function FarmerUploadCrop() {
                                 <label className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-primary-300 transition-colors cursor-pointer block">
                                     <input type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} />
                                     <Image className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                                    <p className="text-sm text-gray-500">Click to upload crop images</p>
-                                    <p className="text-xs text-gray-400 mt-1">JPG, PNG up to 5MB each</p>
+                                    <p className="text-sm text-gray-500">{t('upload_page.click_upload')}</p>
+                                    <p className="text-xs text-gray-400 mt-1">{t('upload_page.file_hint')}</p>
                                 </label>
                             )}
                         </div>
@@ -198,7 +200,7 @@ export default function FarmerUploadCrop() {
                             {loading ? (
                                 <div className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
                             ) : (
-                                <><Upload className="w-5 h-5" /> Publish Listing</>
+                                <><Upload className="w-5 h-5" /> {t('upload_page.publish_listing')}</>
                             )}
                         </button>
                     </form>
