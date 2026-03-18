@@ -441,6 +441,18 @@
     "spices": "Spices",
     "cash_crops": "Cash Crops"
   },
+  "voice": {
+    "start": "Tap to speak",
+    "listening": "Listening...",
+    "stop": "Tap to stop",
+    "unsupported": "Voice input not supported in this browser",
+    "error": "Could not recognize speech. Please try again.",
+    "hint": "Say crop details like: Wheat, 500 kg, 25 rupees per kg, Indore",
+    "fill_hint": "🎤 Use voice to fill this field",
+    "voice_fill": "🎤 Voice Fill",
+    "voice_fill_desc": "Speak your crop details and we'll fill the form for you",
+    "filled": "Filled from voice!"
+  },
   "mock": {
     "Organic Wheat": "Organic Wheat",
     "Basmati Rice": "Basmati Rice",

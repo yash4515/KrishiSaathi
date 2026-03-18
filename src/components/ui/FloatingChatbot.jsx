@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { X, MessageCircle, Send } from 'lucide-react';
+import { sendMessageToOpenAI } from '../../services/openaiService';
 
 export default function FloatingChatbot() {
     const { t } = useTranslation();
@@ -12,23 +13,38 @@ export default function FloatingChatbot() {
         { id: 1, text: t('chatbot.greeting'), sender: 'bot' }
     ]);
     const [inputValue, setInputValue] = useState('');
+    const [isTyping, setIsTyping] = useState(false);
 
     const toggleChat = () => setIsOpen(!isOpen);
 
-    const handleOptionSelect = (optionText) => {
-        setMessages([...messages, { id: Date.now(), text: optionText, sender: 'user' }]);
+    const handleOptionSelect = async (optionText) => {
+        const userMsg = { id: Date.now(), text: optionText, sender: 'user' };
+        setMessages((prev) => [...prev, userMsg]);
         // Navigate to disease detection if that option is selected
         if (optionText === t('chatbot.options.detect')) {
             setIsOpen(false);
             navigate('/detect');
+            return;
         }
+
+        setIsTyping(true);
+        const aiResponseText = await sendMessageToOpenAI([...messages, userMsg]);
+        setMessages((prev) => [...prev, { id: Date.now(), text: aiResponseText, sender: 'bot' }]);
+        setIsTyping(false);
     };
 
-    const handleSend = (e) => {
+    const handleSend = async (e) => {
         e.preventDefault();
         if (!inputValue.trim()) return;
-        setMessages([...messages, { id: Date.now(), text: inputValue, sender: 'user' }]);
+        
+        const userMsg = { id: Date.now(), text: inputValue, sender: 'user' };
+        setMessages((prev) => [...prev, userMsg]);
         setInputValue('');
+
+        setIsTyping(true);
+        const aiResponseText = await sendMessageToOpenAI([...messages, userMsg]);
+        setMessages((prev) => [...prev, { id: Date.now(), text: aiResponseText, sender: 'bot' }]);
+        setIsTyping(false);
     };
 
     const chatbotOptions = [
@@ -83,6 +99,16 @@ export default function FloatingChatbot() {
                                     </div>
                                 </div>
                             ))}
+
+                            {isTyping && (
+                                <div className="flex justify-start">
+                                    <div className="bg-white text-gray-800 rounded-2xl rounded-tl-sm shadow-sm border border-gray-100 p-3 max-w-[80%] flex items-center gap-1">
+                                        <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                        <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                        <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Options Bubbles */}
                             {messages.length === 1 && (

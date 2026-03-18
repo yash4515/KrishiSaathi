@@ -249,3 +249,85 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #64748b;
 }
+
+/* ========== Voice Input Styles ========== */
+
+/* Voice card */
+.voice-card {
+  @apply bg-gradient-to-br from-primary-50 via-white to-primary-50 rounded-2xl border-2 border-dashed border-primary-200 p-6 text-center transition-all duration-300;
+}
+.voice-card:hover {
+  @apply border-primary-400 shadow-lg shadow-primary-100;
+}
+
+/* Large mic button */
+.voice-btn-lg {
+  @apply relative w-16 h-16 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center transition-all duration-300 cursor-pointer border-0 outline-none;
+}
+.voice-btn-lg:hover {
+  @apply bg-primary-200 scale-105;
+}
+.voice-btn-lg-active {
+  @apply bg-primary-600 text-white shadow-xl shadow-primary-600/40;
+}
+
+/* Small per-field mic button */
+.voice-btn-sm {
+  @apply w-8 h-8 rounded-full bg-primary-50 flex items-center justify-center cursor-pointer border-0 outline-none transition-all duration-200 flex-shrink-0;
+}
+.voice-btn-sm:hover {
+  @apply bg-primary-100 scale-110;
+}
+.voice-btn-sm-active {
+  @apply bg-primary-600;
+}
+
+/* Pulse rings */
+.voice-pulse-ring {
+  @apply absolute inset-0 rounded-full border-2 border-primary-400;
+  animation: voicePulse 1.5s ease-out infinite;
+}
+.voice-pulse-ring-2 { animation-delay: 0.3s; }
+.voice-pulse-ring-3 { animation-delay: 0.6s; }
+
+@keyframes voicePulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Small pulse */
+.voice-pulse-sm {
+  @apply absolute inset-0 rounded-full border border-white/50;
+  animation: voicePulse 1.2s ease-out infinite;
+}
+
+/* Sound wave bars */
+.voice-wave-bars {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 24px;
+}
+.voice-wave-bar {
+  width: 3px;
+  background: white;
+  border-radius: 999px;
+  animation: soundWave 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes soundWave {
+  0% { height: 6px; }
+  100% { height: 20px; }
+}
+
+/* Field filled flash */
+@keyframes fieldFlash {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+  50% { box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+.voice-field-flash {
+  animation: fieldFlash 0.8s ease-out;
+  border-color: #22c55e !important;
+}

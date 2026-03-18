@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Navbar from '../components/layout/Navbar';
 import { useTranslation } from 'react-i18next';
 import { Send, Bot, User, Mic, Leaf } from 'lucide-react';
+import { sendMessageToOpenAI } from '../services/openaiService';
 
 const quickActions = [
     '🌾 Crop prices today',
@@ -11,13 +12,7 @@ const quickActions = [
     '🛡️ Insurance help',
 ];
 
-const botResponses = [
-    'Based on current market trends, wheat prices are around ₹2,200-2,500 per quintal in most mandis.',
-    'According to the weather forecast, expect partly cloudy skies with temperatures around 28-32°C this week.',
-    'For wheat crops, I recommend NPK 10-26-26 fertilizer at the current growth stage. Apply 50kg per acre.',
-    'You can apply for Pradhan Mantri Fasal Bima Yojana through our Insurance section. Premium starts at ₹500/acre.',
-    'I can help you with crop management, market prices, weather updates, and government scheme information.',
-];
+
 
 export default function ChatSupportPage() {
     const { t } = useTranslation();
@@ -32,18 +27,24 @@ export default function ChatSupportPage() {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages, typing]);
 
-    const sendMessage = (text) => {
+    const sendMessage = async (text) => {
         if (!text.trim()) return;
         const now = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-        setMessages(prev => [...prev, { id: Date.now(), type: 'user', text, time: now }]);
+        const userMsg = { id: Date.now(), type: 'user', text, time: now };
+        
+        setMessages(prev => [...prev, userMsg]);
         setInput('');
         setTyping(true);
 
-        setTimeout(() => {
-            const response = botResponses[Math.floor(Math.random() * botResponses.length)];
-            setMessages(prev => [...prev, { id: Date.now() + 1, type: 'bot', text: response, time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) }]);
-            setTyping(false);
-        }, 1200);
+        const aiResponseText = await sendMessageToOpenAI([...messages, userMsg]);
+        
+        setMessages(prev => [...prev, { 
+            id: Date.now() + 1, 
+            type: 'bot', 
+            text: aiResponseText, 
+            time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) 
+        }]);
+        setTyping(false);
     };
 
     return (

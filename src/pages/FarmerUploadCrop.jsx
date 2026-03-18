@@ -1,20 +1,124 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import DashboardLayout from '../components/layout/DashboardLayout';
-import { Upload, Plus, X, MapPin, Image, FileText } from 'lucide-react';
+import { Upload, Plus, X, MapPin, Image, FileText, Mic } from 'lucide-react';
 import { cropAPI } from '../services/api';
+import useVoiceInput from '../hooks/useVoiceInput';
+import VoiceInputButton from '../components/ui/VoiceInputButton';
+
+// ── Voice transcript parsing ──────────────────────────────────
+function parseVoiceTranscript(text) {
+    const result = {};
+    const lower = text.toLowerCase();
+
+    // Extract quantity — number followed by kg / kilo / किलो / কেজি etc.
+    const qtyMatch = text.match(/(\d+)\s*(?:kg|kilo|kilos|किलो|কেজি|கிலோ|കിലോ|ਕਿਲੋ|કિલો|किलो)/i);
+    if (qtyMatch) result.quantity = qtyMatch[1];
+
+    // Extract price — number followed by rupees / rupee / ₹ / रुपये / টাকা etc.
+    const priceMatch = text.match(/(\d+)\s*(?:rupees?|₹|रुपये|रुपया|টাকা|ரூபாய்|രൂപ|ਰੁਪਏ|રૂપિયા|रुपये)/i);
+    if (priceMatch) result.pricePerKg = priceMatch[1];
+
+    // Extract location — text after "from" / "से" / "location" / "স্থান"
+    const locMatch = text.match(/(?:from|location|से|স্থান|இடம்|സ്ഥലം|ਤੋਂ|થી|स्थान)\s+(.+?)(?:,|\.|$)/i);
+    if (locMatch) result.location = locMatch[1].trim();
+
+    // Category matching
+    const categoryMap = {
+        grains: ['wheat', 'rice', 'corn', 'maize', 'barley', 'millet', 'गेहूं', 'चावल', 'ধান', 'গম', 'கோதுமை', 'ഗോതമ്പ്', 'ਕਣਕ', 'ઘઉં', 'गहू', 'तांदूळ'],
+        vegetables: ['tomato', 'potato', 'onion', 'cabbage', 'spinach', 'टमाटर', 'आलू', 'प्याज', 'টমেটো', 'আলু', 'தக்காளி', 'തക്കാളി', 'ਟਮਾਟਰ', 'ટમેટા', 'कांदा'],
+        fruits: ['mango', 'apple', 'banana', 'grape', 'orange', 'आम', 'सेब', 'কলা', 'আম', 'மாம்பழம்', 'മാമ്പഴം', 'ਅੰਬ', 'કેરી', 'आंबा'],
+        pulses: ['dal', 'lentil', 'chickpea', 'moong', 'chana', 'दाल', 'চানা', 'ডাল', 'பருப்பு', 'പയർ', 'ਦਾਲ', 'દાળ', 'डाळ'],
+        spices: ['chilli', 'turmeric', 'cumin', 'pepper', 'coriander', 'मिर्च', 'हल्दी', 'মরিচ', 'হলুদ', 'மிளகாய்', 'മുളക്', 'ਮਿਰਚ', 'મરચું', 'मिरची', 'हळद'],
+        cash_crops: ['cotton', 'sugarcane', 'jute', 'tobacco', 'coffee', 'कपास', 'गन्ना', 'তুলা', 'আখ', 'பருத்தி', 'കരിമ്പ്', 'ਕਪਾਹ', 'કપાસ', 'कापूस', 'ऊस'],
+    };
+
+    for (const [cat, keywords] of Object.entries(categoryMap)) {
+        if (keywords.some(k => lower.includes(k))) {
+            result.category = cat;
+            break;
+        }
+    }
+
+    // Crop name — try to extract from beginning (before any numbers)
+    const nameMatch = text.match(/^([a-zA-Z\u0900-\u097F\u0980-\u09FF\u0A00-\u0A7F\u0A80-\u0AFF\u0B00-\u0B7F\u0B80-\u0BFF\u0C00-\u0C7F\u0C80-\u0CFF\u0D00-\u0D7F\s]+?)(?:,|\d|$)/);
+    if (nameMatch) {
+        const name = nameMatch[1].trim();
+        if (name.length > 1) result.name = name;
+    }
+
+    return result;
+}
 
 export default function FarmerUploadCrop() {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [form, setForm] = useState({
         name: '', quantity: '', pricePerKg: '', location: '', description: '', category: 'grains'
     });
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [flashFields, setFlashFields] = useState({});
+
+    // Voice hook for full-form fill
+    const mainVoice = useVoiceInput();
+    // Voice hook for per-field input
+    const fieldVoice = useVoiceInput();
+    const [activeField, setActiveField] = useState(null);
 
     const set = (key) => (e) => setForm({ ...form, [key]: e.target.value });
+
+    // Flash a field green briefly
+    const flashField = useCallback((fields) => {
+        setFlashFields(fields);
+        setTimeout(() => setFlashFields({}), 800);
+    }, []);
+
+    // Handle main voice result — parse and fill all fields
+    const handleMainVoiceResult = useCallback((transcript) => {
+        const parsed = parseVoiceTranscript(transcript);
+        const updates = {};
+        const flashed = {};
+
+        if (parsed.name) { updates.name = parsed.name; flashed.name = true; }
+        if (parsed.quantity) { updates.quantity = parsed.quantity; flashed.quantity = true; }
+        if (parsed.pricePerKg) { updates.pricePerKg = parsed.pricePerKg; flashed.pricePerKg = true; }
+        if (parsed.location) { updates.location = parsed.location; flashed.location = true; }
+        if (parsed.category) { updates.category = parsed.category; flashed.category = true; }
+
+        if (Object.keys(updates).length > 0) {
+            setForm(prev => ({ ...prev, ...updates }));
+            flashField(flashed);
+        }
+    }, [flashField]);
+
+    // Handle per-field voice result
+    const handleFieldVoiceResult = useCallback((field, transcript) => {
+        setForm(prev => ({ ...prev, [field]: transcript }));
+        flashField({ [field]: true });
+        setActiveField(null);
+    }, [flashField]);
+
+    // Toggle main voice
+    const toggleMainVoice = useCallback(() => {
+        if (mainVoice.isListening) {
+            mainVoice.stopListening();
+        } else {
+            mainVoice.startListening(i18n.language, handleMainVoiceResult);
+        }
+    }, [mainVoice, i18n.language, handleMainVoiceResult]);
+
+    // Toggle per-field voice
+    const toggleFieldVoice = useCallback((field) => {
+        if (fieldVoice.isListening && activeField === field) {
+            fieldVoice.stopListening();
+            setActiveField(null);
+        } else {
+            setActiveField(field);
+            fieldVoice.startListening(i18n.language, (transcript) => handleFieldVoiceResult(field, transcript));
+        }
+    }, [fieldVoice, activeField, i18n.language, handleFieldVoiceResult]);
 
     const handleImageUpload = (e) => {
         const files = Array.from(e.target.files);
@@ -72,6 +176,24 @@ export default function FarmerUploadCrop() {
         { value: 'cash_crops', label: `🌿 ${t('upload_page.cat_cash_crops')}` },
     ];
 
+    // Helper: field class with optional flash
+    const fieldClass = (fieldName, extra = '') =>
+        `input-field ${extra} ${flashFields[fieldName] ? 'voice-field-flash' : ''}`;
+
+    // Helper: render small mic button for a field
+    const FieldMic = ({ field }) => (
+        mainVoice.isSupported ? (
+            <VoiceInputButton
+                size="sm"
+                isListening={fieldVoice.isListening && activeField === field}
+                isSupported={mainVoice.isSupported}
+                interimTranscript={activeField === field ? fieldVoice.interimTranscript : ''}
+                error={activeField === field ? fieldVoice.error : null}
+                onToggle={() => toggleFieldVoice(field)}
+            />
+        ) : null
+    );
+
     return (
         <DashboardLayout>
             <div className="max-w-2xl">
@@ -82,6 +204,23 @@ export default function FarmerUploadCrop() {
                     </h1>
                     <p className="page-subtitle">{t('upload_page.subtitle')}</p>
                 </div>
+
+                {/* ─── Voice Fill Section ──────────────────────────── */}
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="mb-6"
+                >
+                    <VoiceInputButton
+                        size="lg"
+                        isListening={mainVoice.isListening}
+                        isSupported={mainVoice.isSupported}
+                        interimTranscript={mainVoice.interimTranscript}
+                        error={mainVoice.error}
+                        onToggle={toggleMainVoice}
+                    />
+                </motion.div>
 
                 {/* Success Banner */}
                 {success && (
@@ -105,8 +244,11 @@ export default function FarmerUploadCrop() {
                         {/* Crop Name */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('upload_page.crop_name')} *</label>
-                            <input type="text" className="input-field" placeholder={t('upload_page.crop_placeholder')}
-                                value={form.name} onChange={set('name')} required />
+                            <div className="flex items-center gap-2">
+                                <input type="text" className={fieldClass('name', 'flex-1')} placeholder={t('upload_page.crop_placeholder')}
+                                    value={form.name} onChange={set('name')} required />
+                                <FieldMic field="name" />
+                            </div>
                         </div>
 
                         {/* Category */}
@@ -121,7 +263,7 @@ export default function FarmerUploadCrop() {
                                         className={`py-2 px-2 rounded-lg text-xs font-medium transition-all text-center ${form.category === c.value
                                             ? 'bg-primary-100 text-primary-700 border-2 border-primary-400'
                                             : 'bg-gray-50 text-gray-600 border-2 border-transparent hover:bg-gray-100'
-                                            }`}
+                                            } ${flashFields.category && form.category === c.value ? 'voice-field-flash' : ''}`}
                                     >
                                         {c.label}
                                     </button>
@@ -133,31 +275,43 @@ export default function FarmerUploadCrop() {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('upload_page.quantity_kg')} *</label>
-                                <input type="number" className="input-field" placeholder={t('upload_page.quantity_placeholder')}
-                                    value={form.quantity} onChange={set('quantity')} required />
+                                <div className="flex items-center gap-2">
+                                    <input type="number" className={fieldClass('quantity', 'flex-1')} placeholder={t('upload_page.quantity_placeholder')}
+                                        value={form.quantity} onChange={set('quantity')} required />
+                                    <FieldMic field="quantity" />
+                                </div>
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('upload_page.price_per_kg')} *</label>
-                                <input type="number" className="input-field" placeholder={t('upload_page.price_placeholder')}
-                                    value={form.pricePerKg} onChange={set('pricePerKg')} required />
+                                <div className="flex items-center gap-2">
+                                    <input type="number" className={fieldClass('pricePerKg', 'flex-1')} placeholder={t('upload_page.price_placeholder')}
+                                        value={form.pricePerKg} onChange={set('pricePerKg')} required />
+                                    <FieldMic field="pricePerKg" />
+                                </div>
                             </div>
                         </div>
 
                         {/* Location */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('upload_page.location')} *</label>
-                            <div className="relative">
-                                <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                                <input type="text" className="input-field pl-10" placeholder={t('upload_page.location_placeholder')}
-                                    value={form.location} onChange={set('location')} required />
+                            <div className="relative flex items-center gap-2">
+                                <div className="relative flex-1">
+                                    <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                    <input type="text" className={fieldClass('location', 'pl-10')} placeholder={t('upload_page.location_placeholder')}
+                                        value={form.location} onChange={set('location')} required />
+                                </div>
+                                <FieldMic field="location" />
                             </div>
                         </div>
 
                         {/* Description */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('upload_page.description')}</label>
-                            <textarea className="input-field h-24 resize-none" placeholder={t('upload_page.desc_placeholder')}
-                                value={form.description} onChange={set('description')} />
+                            <div className="flex items-start gap-2">
+                                <textarea className={fieldClass('description', 'h-24 resize-none flex-1')} placeholder={t('upload_page.desc_placeholder')}
+                                    value={form.description} onChange={set('description')} />
+                                <FieldMic field="description" />
+                            </div>
                         </div>
 
                         {/* Image Upload */}
