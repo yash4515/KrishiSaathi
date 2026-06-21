@@ -32,6 +32,7 @@ AI-Service/logs/
 AI-Service/*.h5
 AI-Service/*.zip
 AI-Service/leaf_grouping/leaf_maps/
+AI-Service/.venv/
 *.JPG
 *.jpg
 *.eps
@@ -48,3 +49,14 @@ AI-Service/leaf_grouping/leaf_maps/
 !AI-Service/treatments.json
 !AI-Service/leaf-map.json
 !AI-Service/class_names.json
+
+# Cloned dataset repo (2GB - use git clone separately)
+PlantVillage-Dataset/
+
+# Python virtual env
+.venv/
+venv/
+env/
+
+# Server env
+server/.env
