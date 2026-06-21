@@ -1,0 +1,91 @@
+name: KrishiSaathi CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ─── Frontend Build Check ───────────────────────────────────────────────────
+  frontend:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Create .env for build
+        run: echo "VITE_API_URL=https://api.krishisaathi.com/api" > .env
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: dist/
+          retention-days: 7
+
+  # ─── Backend Lint & Dependency Check ────────────────────────────────────────
+  backend:
+    name: Backend Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install backend dependencies
+        run: npm ci
+        working-directory: server
+
+      - name: Check for syntax errors
+        run: node --check server.js
+        working-directory: server
+
+  # ─── AI Service Dependency Check ────────────────────────────────────────────
+  ai-service:
+    name: AI Service Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: AI-Service/requirements.txt
+
+      - name: Install AI service dependencies
+        run: pip install -r requirements.txt
+        working-directory: AI-Service
+
+      - name: Check FastAPI app syntax
+        run: python -c "import app; print('AI service imports OK')"
+        working-directory: AI-Service
+
+      - name: Verify treatments.json is valid JSON
+        run: python -c "import json; data=json.load(open('treatments.json')); print(f'Loaded {len(data)} treatment entries OK')"
+        working-directory: AI-Service
