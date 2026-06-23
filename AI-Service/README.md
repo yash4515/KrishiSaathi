@@ -55,7 +55,6 @@ The repository is organized as follows:
 With [git](https://git-scm.com/downloads) installed:
 ```bash
 git clone https://github.com/spMohanty/PlantVillage-Dataset
-cd PlantVillage-Dataset
 ```
 
 ### Dataset Upload (Maintenance)

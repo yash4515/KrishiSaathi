@@ -36,7 +36,14 @@ exports.login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
-        const user = await User.findOne({ email }).select('+password');
+        const loginInput = email ? email.trim() : '';
+        const isEmail = loginInput.includes('@');
+
+        const query = isEmail
+            ? { email: loginInput.toLowerCase() }
+            : { phone: loginInput };
+
+        const user = await User.findOne(query).select('+password');
         if (!user) {
             return res.status(401).json({ success: false, message: 'Invalid email or password.' });
         }

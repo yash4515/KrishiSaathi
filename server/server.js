@@ -24,10 +24,23 @@ const { initJobs }   = require('./jobs');
 const app = express();
 const server = http.createServer(app);
 
+// Dynamic CORS origin configuration
+const clientUrl = process.env.CLIENT_URL;
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:3000'];
+if (clientUrl) {
+    const trimmedUrl = clientUrl.trim();
+    allowedOrigins.push(trimmedUrl);
+    if (trimmedUrl.endsWith('/')) {
+        allowedOrigins.push(trimmedUrl.slice(0, -1));
+    } else {
+        allowedOrigins.push(trimmedUrl + '/');
+    }
+}
+
 // Socket.io setup
 const io = new Server(server, {
     cors: {
-        origin: process.env.CLIENT_URL || 'http://localhost:5173',
+        origin: allowedOrigins,
         methods: ['GET', 'POST'],
     },
 });
@@ -57,7 +70,7 @@ io.on('connection', (socket) => {
 // Middleware
 app.use(helmet());
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: allowedOrigins,
     credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
