@@ -1,6 +1,6 @@
-require('dotenv').config({ path: './server/.env' });
+require('dotenv').config();
 const mongoose = require('mongoose');
-const User = require('./server/models/User');
+const User = require('./models/User');
 
 const test = async () => {
     try {

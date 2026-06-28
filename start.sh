@@ -34,13 +34,13 @@ echo "[4/4] Starting all services..."
 echo ""
 echo "  Frontend   → http://localhost:5173"
 echo "  Backend    → http://localhost:8000"
-echo "  AI Service → http://localhost:5000"
-echo "  API Docs   → http://localhost:5000/docs"
+echo "  AI Service → http://localhost:5005"
+echo "  API Docs   → http://localhost:5005/docs"
 echo ""
 
 # Start AI Service in background
 cd AI-Service
-.venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port 5000 &
+.venv/bin/python -m uvicorn app:app --host 0.0.0.0 --port 5005 &
 AI_PID=$!
 cd ..
 

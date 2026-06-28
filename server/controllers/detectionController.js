@@ -2,7 +2,7 @@ const Detection = require('../models/Detection');
 const http = require('http');
 const FormData = require('form-data');
 
-const AI_SERVICE_URL = process.env.AI_SERVICE_URL || 'http://localhost:5000';
+const AI_SERVICE_URL = process.env.AI_SERVICE_URL || 'http://localhost:5005';
 
 // POST /api/detection/predict
 exports.detectDisease = async (req, res, next) => {
@@ -32,9 +32,14 @@ exports.detectDisease = async (req, res, next) => {
                 let data = '';
                 aiRes.on('data', (chunk) => (data += chunk));
                 aiRes.on('end', () => {
+                    if (aiRes.statusCode < 200 || aiRes.statusCode >= 300) {
+                        console.error(`❌ AI service responded with status ${aiRes.statusCode}:`, data);
+                        return reject(new Error(`AI service returned status code ${aiRes.statusCode}`));
+                    }
                     try {
                         resolve(JSON.parse(data));
-                    } catch {
+                    } catch (err) {
+                        console.error('❌ Failed to parse AI service response:', data);
                         reject(new Error('Invalid response from AI service'));
                     }
                 });
@@ -71,7 +76,7 @@ exports.detectDisease = async (req, res, next) => {
         if (error.code === 'ECONNREFUSED') {
             return res.status(503).json({
                 success: false,
-                message: 'AI service is not running. Please start the Python AI service on port 5000.',
+                message: 'AI service is not running. Please start the Python AI service on port 5005.',
             });
         }
         next(error);

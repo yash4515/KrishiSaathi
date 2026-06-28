@@ -52,7 +52,7 @@ KrishiSaathi/
 │   ├── middlewares/        # JWT auth, rate limiting, error handling
 │   └── services/           # External integrations (Cloudinary, Razorpay)
 │
-└── AI-Service/             # Python FastAPI AI microservice (Port 5000)
+└── AI-Service/             # Python FastAPI AI microservice (Port 5005)
     ├── app.py              # FastAPI server with /predict and /health endpoints
     ├── train.py            # MobileNetV2 transfer learning training script
     ├── treatments.json     # Treatment database for 38 disease classes
@@ -116,8 +116,8 @@ python -m venv .venv
 pip install -r requirements.txt
 
 # Start AI microservice (Demo Mode - no model needed)
-uvicorn app:app --host 0.0.0.0 --port 5000
-# → Runs on http://localhost:5000
+uvicorn app:app --host 0.0.0.0 --port 5005
+# → Runs on http://localhost:5005
 ```
 
 ### 5. (Optional) Train the Disease Detection Model
