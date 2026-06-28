@@ -27,7 +27,9 @@ const server = http.createServer(app);
 // Dynamic CORS origin configuration
 const clientUrl = process.env.CLIENT_URL;
 const allowedOrigins = [
-    'http://localhost:5173', 
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175',
     'http://localhost:3000',
     'https://krishi-saathi045.vercel.app',
     'https://krishi-saathi045.vercel.app/'
