@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
@@ -11,9 +11,14 @@ export default function LoginPage() {
     const [showPass, setShowPass] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const { login } = useAuth();
+    const { user, login } = useAuth();
     const { t } = useTranslation();
     const navigate = useNavigate();
+
+    // Redirect already-authenticated users to their dashboard
+    if (user) {
+        return <Navigate to={`/${user.role}`} replace />;
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
