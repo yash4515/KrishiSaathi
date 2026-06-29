@@ -1,0 +1,194 @@
+# KrishiSaathi — Product Requirements Document (PRD)
+
+**Version:** 1.0  
+**Author:** Yash Mishra  
+**Date:** June 2026  
+**Status:** Active Development
+
+---
+
+## 1. Executive Summary
+
+KrishiSaathi ("Krishi" = farming, "Saathi" = companion/partner) is a full-stack AgriTech platform designed to digitally empower Indian farmers. It bridges the gap between farmers, buyers, and agricultural services through AI-powered tools, a real-time marketplace, integrated payments, and multilingual support — all in one platform accessible via web and mobile browser.
+
+**Mission:** Give every Indian farmer — regardless of literacy, language, or tech familiarity — a trusted digital partner for farming success.
+
+---
+
+## 2. Problem Statement
+
+Indian farmers face a fragmented ecosystem of challenges:
+
+- **Crop disease identification** is slow, expensive, and requires expert access that rural farmers rarely have.
+- **Market access** is limited; farmers depend on intermediaries (mandis, dalals) who often exploit pricing asymmetries.
+- **Financial protection** through crop insurance is available but largely inaccessible due to complex paperwork and low awareness.
+- **Language barriers** prevent adoption of most existing AgriTech tools that are English-only.
+- **Information gaps** around market prices, weather, and farming news lead to poor decision-making.
+
+---
+
+## 3. Goals & Success Metrics
+
+| Goal | Key Metric | Target |
+|---|---|---|
+| Enable fast crop disease detection | Avg. detection time | < 10 seconds |
+| Increase farmer market access | Active crop listings | 500+ in 3 months |
+| Drive buyer engagement | Monthly active buyers | 200+ in 3 months |
+| Improve multilingual reach | % non-English sessions | > 60% |
+| Reduce payment friction | Successful Razorpay transactions | > 95% success rate |
+| AI Chat engagement | Avg. queries/user/week | ≥ 3 |
+
+---
+
+## 4. User Personas
+
+### Persona 1 — Ramesh (Farmer)
+- **Age:** 38 | **Location:** Vidarbha, Maharashtra
+- **Tech proficiency:** Low-Medium (uses WhatsApp, basic smartphone)
+- **Primary language:** Marathi
+- **Goals:** Sell produce at fair prices, identify crop diseases early, get insurance
+- **Pain points:** Distance from markets, no crop disease knowledge, language barriers in apps
+
+### Persona 2 — Priya (Buyer / Trader)
+- **Age:** 29 | **Location:** Pune
+- **Tech proficiency:** High
+- **Primary language:** Hindi/English
+- **Goals:** Source fresh produce directly from farmers at competitive prices, bid in real-time
+- **Pain points:** Middlemen inflate prices; no direct farmer contact
+
+### Persona 3 — Anil (Agri-Store Customer)
+- **Age:** 45 | **Location:** Nagpur district
+- **Tech proficiency:** Low
+- **Goals:** Purchase seeds, fertilizers, tools online without traveling to town
+- **Pain points:** Limited availability of quality agri-inputs locally
+
+---
+
+## 5. Feature Requirements
+
+### 5.1 Authentication & User Management
+**Priority: P0 (Must Have)**
+
+- User registration with name, email, phone, password, and role (Farmer / Buyer)
+- JWT-based login with 7-day token expiry
+- Role-based access control (farmers list crops; buyers bid/buy)
+- Profile management (update name, contact, location, profile photo)
+- Password reset via email
+
+### 5.2 AI Crop Disease Detection
+**Priority: P0 (Must Have)**
+
+- Upload leaf photo via camera or gallery
+- MobileNetV2 CNN model classifies disease from 38 classes across 14 crops
+- Returns: disease name, confidence score, treatment recommendation
+- Detection history stored per user
+- Voice-based image upload trigger (P1)
+- Demo mode fallback when model unavailable
+
+### 5.3 Digital Marketplace
+**Priority: P0 (Must Have)**
+
+- Farmers create crop listings with: name, quantity, price/unit, location, harvest date, photos
+- Buyers browse listings with search and category filters
+- Real-time bidding via Socket.IO
+- Listing expiry management
+- Farmer dashboard to track listings and bids received
+
+### 5.4 Order Management
+**Priority: P0 (Must Have)**
+
+- Buyer places order for a listing
+- Order lifecycle: Placed → Confirmed → Shipped → Delivered / Cancelled
+- Payment integration via Razorpay (test & live modes)
+- Order history for both farmers and buyers
+- Email/in-app notifications on status changes
+
+### 5.5 Agri Store
+**Priority: P1 (Should Have)**
+
+- Product catalog: seeds, fertilizers, pesticides, tools
+- Category-based browsing
+- Cart and checkout with Razorpay payment
+- Inventory management by admin
+- Product detail pages with usage instructions
+
+### 5.6 Crop Insurance
+**Priority: P1 (Should Have)**
+
+- Browse government and private insurance schemes
+- Filter by crop type, region, premium amount
+- View scheme details (coverage, eligibility, documents required)
+- Apply/express interest (redirect to official scheme portal or in-app form)
+
+### 5.7 AI Chat Support
+**Priority: P1 (Should Have)**
+
+- 24/7 AI farming assistant (Claude/GPT integration)
+- Context-aware responses for farming queries
+- Multilingual support (English, Hindi, Marathi)
+- Chat history stored per session
+
+### 5.8 Krishi Samachar (News & Prices)
+**Priority: P1 (Should Have)**
+
+- Live agricultural news feed from external APIs
+- Daily mandi (market) price updates by crop and region
+- Weather widget for user's location
+
+### 5.9 Multilingual Support
+**Priority: P0 (Must Have)**
+
+- English, Hindi, Marathi via i18next
+- Language preference stored in user profile
+- All UI labels, error messages, and notifications translated
+
+### 5.10 Voice Commands
+**Priority: P2 (Nice to Have)**
+
+- Voice-triggered crop listing upload
+- Voice navigation for key app flows
+- Web Speech API integration
+
+---
+
+## 6. Non-Functional Requirements
+
+| Category | Requirement |
+|---|---|
+| Performance | Page load < 3s on 4G; AI detection < 10s |
+| Availability | 99.5% uptime target |
+| Scalability | Support 10,000 concurrent users |
+| Security | JWT auth, HTTPS, input sanitization, rate limiting |
+| Accessibility | WCAG 2.1 AA compliance, keyboard navigation |
+| Localization | RTL layout consideration for future languages |
+| Mobile | Responsive design, PWA-ready |
+
+---
+
+## 7. Constraints & Assumptions
+
+- Target devices: mid-range Android smartphones (primary), desktop (secondary)
+- Internet connectivity: 4G/LTE assumed; offline PWA for future phase
+- Razorpay available only for Indian payment methods
+- AI model accuracy depends on PlantVillage dataset (14 crop types)
+- Demo mode ensures AI service remains usable without a trained model
+
+---
+
+## 8. Out of Scope (v1)
+
+- iOS/Android native apps
+- Offline-first mode
+- Logistics/delivery tracking integration
+- Farmer credit/loan features
+- Automated government scheme integration via APIs
+
+---
+
+## 9. Release Phases
+
+| Phase | Features | Timeline |
+|---|---|---|
+| Phase 1 (MVP) | Auth, Disease Detection, Marketplace, Orders, Multilingual | Month 1–2 |
+| Phase 2 | Agri Store, Insurance, AI Chat, News/Prices | Month 3–4 |
+| Phase 3 | Voice Commands, PWA, Analytics Dashboard | Month 5–6 |

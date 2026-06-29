@@ -1,0 +1,337 @@
+# KrishiSaathi — Technical Requirements Document (TRD)
+
+**Version:** 1.0  
+**Author:** Yash Mishra  
+**Date:** June 2026  
+**Status:** Active Development
+
+---
+
+## 1. System Overview
+
+KrishiSaathi is a distributed, three-tier system composed of:
+
+1. **React Frontend** — SPA served via Vercel (CDN)
+2. **Node.js/Express Backend API** — REST + WebSocket server on Render
+3. **Python FastAPI AI Microservice** — ML inference service on Render
+
+All three communicate over HTTPS. The frontend calls the backend REST API and receives real-time events via Socket.IO. The backend proxies AI detection requests to the AI microservice.
+
+---
+
+## 2. Architecture Diagram
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                        CLIENT (Browser)                       │
+│              React 19 + Vite + TailwindCSS                    │
+│         Vercel CDN — https://krishisaathi.vercel.app          │
+└────────────────────────┬─────────────────────────────────────┘
+                         │ HTTPS (REST + Socket.IO)
+                         ▼
+┌──────────────────────────────────────────────────────────────┐
+│                   BACKEND API SERVER                          │
+│         Node.js 22 + Express 5 — Port 8000                   │
+│         Render — krishisaathi-backend.onrender.com           │
+│                                                              │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────┐   │
+│  │  Auth    │ │  Crops   │ │  Orders  │ │  Detection   │   │
+│  │  Routes  │ │  Routes  │ │  Routes  │ │  Routes      │   │
+│  └──────────┘ └──────────┘ └──────────┘ └──────┬───────┘   │
+│                                                  │ HTTP      │
+│  ┌──────────────────────────────────────────┐   │           │
+│  │   Socket.IO (Real-time Bidding)          │   │           │
+│  └──────────────────────────────────────────┘   │           │
+└─────────────────────────────────────────────────┼───────────┘
+         │ Mongoose                                │ HTTP POST
+         ▼                                         ▼
+┌─────────────────┐              ┌──────────────────────────────┐
+│  MongoDB Atlas  │              │   PYTHON AI MICROSERVICE      │
+│  (Data Layer)   │              │   FastAPI — Port 5005         │
+│  512MB free     │              │   Render — krishisaathi-ai    │
+└─────────────────┘              │                              │
+                                 │  /predict — MobileNetV2      │
+                                 │  /health  — Status check     │
+                                 └──────────────────────────────┘
+         │                                         │
+         ▼                                         ▼
+┌─────────────────┐              ┌──────────────────────────────┐
+│   Cloudinary    │              │   PlantVillage Model          │
+│   (Image CDN)   │              │   plant_disease_model.h5      │
+└─────────────────┘              └──────────────────────────────┘
+```
+
+---
+
+## 3. Frontend Technical Specifications
+
+### 3.1 Stack
+| Component | Technology | Version |
+|---|---|---|
+| Framework | React | 19.x |
+| Build Tool | Vite | Latest |
+| Styling | TailwindCSS | 3.x |
+| Animation | Framer Motion | Latest |
+| HTTP Client | Axios | Latest |
+| Real-time | Socket.IO Client | Latest |
+| i18n | i18next + react-i18next | Latest |
+| Voice | Web Speech API | Browser native |
+| State Management | React Context (AuthContext) | Built-in |
+| Routing | React Router v6 | Latest |
+
+### 3.2 Directory Structure
+```
+src/
+├── pages/
+│   ├── LandingPage.jsx
+│   ├── DiseaseDetectionPage.jsx
+│   ├── MarketplacePage.jsx
+│   ├── OrdersPage.jsx
+│   ├── AgriStorePage.jsx
+│   ├── InsurancePage.jsx
+│   ├── ChatPage.jsx
+│   ├── NewsPage.jsx
+│   ├── ProfilePage.jsx
+│   └── Auth/
+│       ├── LoginPage.jsx
+│       └── RegisterPage.jsx
+├── components/
+│   ├── Navbar.jsx
+│   ├── CropCard.jsx
+│   ├── BidModal.jsx
+│   ├── DetectionResult.jsx
+│   └── ...
+├── services/
+│   ├── api.js          (Axios instance)
+│   ├── authService.js
+│   ├── cropService.js
+│   ├── detectionService.js
+│   └── orderService.js
+├── context/
+│   └── AuthContext.jsx
+├── hooks/
+│   ├── useAuth.js
+│   └── useSocket.js
+└── locales/
+    ├── en/translation.json
+    ├── hi/translation.json
+    └── mr/translation.json
+```
+
+### 3.3 Environment Variables (Frontend)
+```
+VITE_API_URL=https://krishisaathi-backend.onrender.com/api
+```
+
+### 3.4 Key Frontend Patterns
+- JWT stored in `localStorage`; injected via Axios request interceptor
+- `AuthContext` wraps entire app; provides `user`, `login()`, `logout()`
+- i18next initialized with language detection from browser/localStorage
+- Socket.IO connection established on marketplace page mount
+- All API errors handled centrally in Axios response interceptor
+
+---
+
+## 4. Backend API Technical Specifications
+
+### 4.1 Stack
+| Component | Technology | Version |
+|---|---|---|
+| Runtime | Node.js | 22.x |
+| Framework | Express | 5.x |
+| Database ORM | Mongoose | 8.x |
+| Authentication | jsonwebtoken + bcryptjs | Latest |
+| Real-time | Socket.IO | 4.x |
+| Image Upload | Multer + Cloudinary SDK | Latest |
+| Payment | Razorpay Node SDK | Latest |
+| Validation | Joi / express-validator | Latest |
+| Rate Limiting | express-rate-limit | Latest |
+
+### 4.2 API Endpoints
+
+#### Auth Routes (`/api/auth`)
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| POST | `/register` | Register new user | Public |
+| POST | `/login` | Login and receive JWT | Public |
+| GET | `/me` | Get current user profile | Private |
+| PUT | `/profile` | Update user profile | Private |
+| POST | `/forgot-password` | Send password reset email | Public |
+
+#### Crop Routes (`/api/crops`)
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| GET | `/` | List all crop listings | Public |
+| POST | `/` | Create new listing | Farmer |
+| GET | `/:id` | Get listing details | Public |
+| PUT | `/:id` | Update listing | Farmer (owner) |
+| DELETE | `/:id` | Delete listing | Farmer (owner) |
+| POST | `/:id/bid` | Place a bid | Buyer |
+| GET | `/my/listings` | Farmer's own listings | Farmer |
+
+#### Disease Detection Routes (`/api/detection`)
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| POST | `/predict` | Upload image, get prediction | Private |
+| GET | `/history` | Get user's detection history | Private |
+| GET | `/:id` | Get single detection result | Private |
+
+#### Order Routes (`/api/orders`)
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| POST | `/` | Place an order | Buyer |
+| GET | `/my` | Get user's orders | Private |
+| GET | `/:id` | Get order details | Private |
+| PUT | `/:id/status` | Update order status | Farmer/Admin |
+| POST | `/payment/verify` | Verify Razorpay payment | Private |
+
+#### Store Routes (`/api/store`)
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| GET | `/products` | List all products | Public |
+| GET | `/products/:id` | Product details | Public |
+| POST | `/cart/checkout` | Checkout cart | Private |
+
+#### Insurance Routes (`/api/insurance`)
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| GET | `/schemes` | List insurance schemes | Public |
+| GET | `/schemes/:id` | Scheme details | Public |
+| POST | `/apply` | Submit application | Private |
+
+#### News Routes (`/api/news`)
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| GET | `/` | Fetch latest agri news | Public |
+| GET | `/prices` | Get mandi prices | Public |
+
+### 4.3 Middleware Stack (per request)
+```
+Request → CORS → Rate Limiter → Body Parser → Auth (JWT) → Route Handler → Error Handler → Response
+```
+
+### 4.4 Socket.IO Events (Real-time Bidding)
+| Event | Direction | Payload |
+|---|---|---|
+| `join_listing` | Client → Server | `{ listingId }` |
+| `leave_listing` | Client → Server | `{ listingId }` |
+| `place_bid` | Client → Server | `{ listingId, amount, userId }` |
+| `new_bid` | Server → Client | `{ bid, listingId, highestBid }` |
+| `bid_accepted` | Server → Client | `{ bidId, farmerId, buyerId }` |
+
+### 4.5 Environment Variables (Backend)
+```
+PORT=8000
+NODE_ENV=production
+MONGODB_URI=mongodb+srv://...
+JWT_SECRET=<32-char random string>
+JWT_EXPIRES_IN=7d
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+RAZORPAY_KEY_ID=...
+RAZORPAY_KEY_SECRET=...
+CLIENT_URL=https://krishisaathi.vercel.app
+AI_SERVICE_URL=https://krishisaathi-ai.onrender.com
+```
+
+---
+
+## 5. AI Microservice Technical Specifications
+
+### 5.1 Stack
+| Component | Technology | Version |
+|---|---|---|
+| Language | Python | 3.12 |
+| Framework | FastAPI | Latest |
+| ML Framework | TensorFlow | 2.21 |
+| Base Model | MobileNetV2 | ImageNet pretrained |
+| Image Processing | Pillow | Latest |
+| ASGI Server | Uvicorn | Latest |
+
+### 5.2 Model Architecture
+- **Base:** MobileNetV2 (pretrained on ImageNet, weights frozen)
+- **Head:** GlobalAveragePooling2D → Dense(128, relu) → Dropout(0.5) → Dense(38, softmax)
+- **Input shape:** (224, 224, 3)
+- **Dataset:** PlantVillage — 54,306 images, 38 disease classes, 14 crops
+- **Training:** Transfer learning, ~30 min GPU / ~2-4 hrs CPU
+- **Output:** `{predicted_class, confidence, treatment, all_predictions[]}`
+
+### 5.3 API Endpoints
+| Method | Path | Description |
+|---|---|---|
+| GET | `/health` | Returns `{"status":"ok","demo_mode": bool}` |
+| POST | `/predict` | Accepts multipart image, returns prediction JSON |
+
+### 5.4 Demo Mode
+When `plant_disease_model.h5` is not found, the service returns realistic predictions drawn from `treatments.json` with randomized confidence scores. This allows full frontend testing without a trained model.
+
+### 5.5 Supported Crop/Disease Classes (38 total)
+Apple (4), Blueberry (1), Cherry (2), Corn (4), Grape (4), Orange (1), Peach (2), Pepper (2), Potato (3), Raspberry (1), Soybean (1), Squash (1), Strawberry (2), Tomato (10)
+
+---
+
+## 6. Database Architecture
+
+See the companion `KrishiSaathi_BackendSchema.md` for full MongoDB schema definitions.
+
+---
+
+## 7. Security Requirements
+
+| Layer | Implementation |
+|---|---|
+| Transport | HTTPS/TLS enforced on all services |
+| Authentication | JWT (HS256), 7-day expiry, httpOnly refresh (future) |
+| Password hashing | bcryptjs, 10 salt rounds |
+| Input validation | express-validator on all POST/PUT endpoints |
+| Rate limiting | 100 req/15min per IP via express-rate-limit |
+| CORS | Whitelist: CLIENT_URL only |
+| Image uploads | File type validation (image/jpeg, image/png, image/webp only) |
+| MongoDB injection | Mongoose schema validation + sanitization |
+| API keys | All secrets in environment variables, never in code |
+
+---
+
+## 8. Performance Requirements
+
+| Metric | Target |
+|---|---|
+| Frontend FCP (First Contentful Paint) | < 1.5s |
+| API response (typical) | < 300ms |
+| AI detection response | < 10s (model loaded) |
+| AI cold start (after sleep) | < 30s |
+| Socket.IO bid propagation | < 100ms |
+| Cloudinary image upload | < 3s |
+| MongoDB query (indexed) | < 50ms |
+
+---
+
+## 9. Deployment Infrastructure
+
+| Service | Provider | Plan | Notes |
+|---|---|---|---|
+| Frontend | Vercel | Free | Auto-deploy on push to main |
+| Backend API | Render | Free | Sleeps after 15min inactivity |
+| AI Service | Render | Free | Sleeps after 15min; 30s cold start |
+| Database | MongoDB Atlas | M0 Free | 512MB storage limit |
+| Image CDN | Cloudinary | Free | 25GB storage, 25GB bandwidth |
+| Payments | Razorpay | Pay-per-use | 2% transaction fee |
+
+### CI/CD Pipeline
+- GitHub Actions workflow (`.github/workflows/`) for automated testing
+- Push to `main` triggers Vercel auto-deploy (frontend)
+- Render auto-deploy linked to GitHub repo (backend + AI)
+
+---
+
+## 10. Third-Party Integrations
+
+| Service | Purpose | SDK/Method |
+|---|---|---|
+| Razorpay | Payment processing | razorpay npm package + Razorpay.js frontend |
+| Cloudinary | Image storage & CDN | cloudinary npm package |
+| MongoDB Atlas | Database hosting | mongoose npm package |
+| Socket.IO | Real-time bidding | socket.io (server), socket.io-client (frontend) |
+| i18next | Internationalization | i18next + react-i18next |
+| Web Speech API | Voice commands | Browser native (no dependency) |
