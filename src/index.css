@@ -1,33 +1,48 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-50: #f0fdf4;
-  --color-primary-100: #dcfce7;
-  --color-primary-200: #bbf7d0;
-  --color-primary-300: #86efac;
-  --color-primary-400: #4ade80;
-  --color-primary-500: #22c55e;
-  --color-primary-600: #16a34a;
-  --color-primary-700: #15803d;
-  --color-primary-800: #166534;
-  --color-primary-900: #14532d;
+  /* ── Earthy Countryside Palette ── */
+  --color-cream: #FDF6E3;
+  --color-cream-dark: #F5ECDA;
+  --color-bark: #3B2F1E;
+  --color-bark-light: #5A4A32;
 
-  --color-accent-400: #facc15;
-  --color-accent-500: #eab308;
-  --color-accent-600: #ca8a04;
+  /* Olive / Forest Greens — replaces old primary */
+  --color-primary-50: #F4F7F0;
+  --color-primary-100: #E6EDE0;
+  --color-primary-200: #C8D8BF;
+  --color-primary-300: #A3BF94;
+  --color-primary-400: #7BA468;
+  --color-primary-500: #5B7A4A;
+  --color-primary-600: #4A6B3A;
+  --color-primary-700: #3D5A30;
+  --color-primary-800: #2E4523;
+  --color-primary-900: #1F3018;
 
-  --color-earth-50: #fefcf3;
-  --color-earth-100: #fdf3d7;
-  --color-earth-200: #fae3a7;
-  --color-earth-300: #f6c95a;
-  --color-earth-400: #d4a03a;
-  --color-earth-500: #92704a;
-  --color-earth-600: #78592f;
-  --color-earth-700: #6b4f30;
-  --color-earth-800: #5a3e20;
-  --color-earth-900: #4a3118;
+  /* Mustard / Warm Gold */
+  --color-accent-400: #E8B931;
+  --color-accent-500: #D4A03A;
+  --color-accent-600: #B8882E;
+
+  /* Terracotta — warm CTA alternate */
+  --color-terra: #C2714F;
+  --color-terra-light: #D4896A;
+  --color-terra-dark: #A85C3D;
+
+  /* Earth tones (kept compatible) */
+  --color-earth-50: #FDF6E3;
+  --color-earth-100: #F5ECDA;
+  --color-earth-200: #EBD9B8;
+  --color-earth-300: #D4B98A;
+  --color-earth-400: #B89B6A;
+  --color-earth-500: #92704A;
+  --color-earth-600: #78592F;
+  --color-earth-700: #6B4F30;
+  --color-earth-800: #5A3E20;
+  --color-earth-900: #4A3118;
 
   --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-display: 'Baloo 2', 'Inter', system-ui, sans-serif;
 }
 
 @layer base {
@@ -43,14 +58,20 @@
 
   body {
     font-family: var(--font-sans);
-    color: #1a1a2e;
-    background: #fafbfc;
+    color: var(--color-bark);
+    background: var(--color-cream);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
 }
 
 @layer components {
+  /* ── Display heading utility ── */
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  /* ── Buttons ── */
   .btn-primary {
     @apply bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg shadow-primary-600/25 hover:shadow-xl hover:shadow-primary-600/30 active:scale-[0.98];
   }
@@ -63,6 +84,15 @@
     @apply bg-accent-500 hover:bg-accent-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg shadow-accent-500/25;
   }
 
+  .btn-terra {
+    background-color: var(--color-terra);
+    color: white;
+    @apply font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg active:scale-[0.98];
+  }
+  .btn-terra:hover {
+    background-color: var(--color-terra-dark);
+  }
+
   .btn-ghost {
     @apply bg-transparent text-gray-600 font-medium py-2.5 px-5 rounded-xl transition-all duration-200 hover:bg-gray-100 active:scale-[0.98];
   }
@@ -71,22 +101,29 @@
     @apply bg-red-50 text-red-600 font-medium py-2.5 px-5 rounded-xl transition-all duration-200 hover:bg-red-100 active:scale-[0.98];
   }
 
+  /* ── Cards ── */
   .card {
-    @apply bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+    @apply bg-white rounded-2xl shadow-md border border-earth-200 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
   }
 
   .card-flat {
-    @apply bg-white rounded-2xl border border-gray-100 overflow-hidden transition-all duration-200;
+    @apply bg-white rounded-2xl border border-earth-200 overflow-hidden transition-all duration-200;
   }
 
+  /* ── Inputs ── */
   .input-field {
-    @apply w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 text-gray-800 placeholder-gray-400;
+    @apply w-full px-4 py-3 rounded-xl border border-earth-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 placeholder-earth-400;
+    color: var(--color-bark);
   }
 
+  /* ── Glass (navbar) ── */
   .glass {
-    @apply bg-white/70 backdrop-blur-lg border border-white/20;
+    background: rgba(253, 246, 227, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(212, 185, 138, 0.3);
   }
 
+  /* ── Gradients ── */
   .gradient-primary {
     @apply bg-gradient-to-br from-primary-600 via-primary-500 to-primary-700;
   }
@@ -96,14 +133,15 @@
   }
 
   .gradient-hero {
-    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 30%, #bbf7d0 60%, #f0fdf4 100%);
+    background: linear-gradient(180deg, var(--color-cream) 0%, var(--color-cream-dark) 100%);
   }
 
+  /* ── Section Spacing ── */
   .section-padding {
     @apply py-16 md:py-24 px-4 md:px-8 lg:px-16;
   }
 
-  /* Sidebar */
+  /* ── Sidebar ── */
   .sidebar-link {
     @apply flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-primary-50 hover:text-primary-700 transition-all duration-200 font-medium;
   }
@@ -112,33 +150,36 @@
     @apply flex items-center gap-3 px-4 py-3 rounded-xl bg-primary-100 text-primary-700 font-semibold shadow-sm;
   }
 
-  /* Dashboard */
+  /* ── Dashboard ── */
   .stat-card {
-    @apply bg-white rounded-2xl p-6 shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300;
+    @apply bg-white rounded-2xl p-6 shadow-md border border-earth-200 hover:shadow-lg transition-shadow duration-300;
   }
 
   .dashboard-header {
-    @apply flex items-center justify-between pb-6 mb-6 border-b border-gray-100;
+    @apply flex items-center justify-between pb-6 mb-6 border-b border-earth-200;
   }
 
   .page-title {
-    @apply text-2xl md:text-3xl font-bold text-gray-900;
+    @apply text-2xl md:text-3xl font-bold;
+    color: var(--color-bark);
   }
 
   .page-subtitle {
-    @apply text-gray-500 mt-1 text-sm md:text-base;
+    @apply mt-1 text-sm md:text-base;
+    color: var(--color-bark-light);
   }
 
-  /* Filter chips */
+  /* ── Filter Chips ── */
   .filter-chip {
-    @apply px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all cursor-pointer border border-gray-200 bg-white text-gray-600 hover:bg-gray-50;
+    @apply px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all cursor-pointer border border-earth-200 bg-white hover:bg-earth-50;
+    color: var(--color-bark-light);
   }
 
   .filter-chip-active {
     @apply px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all cursor-pointer bg-primary-600 text-white shadow-md border border-primary-600;
   }
 
-  /* Badges */
+  /* ── Badges ── */
   .badge {
     @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
   }
@@ -163,12 +204,12 @@
     @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700;
   }
 
-  /* Cards with glow on hover */
+  /* ── Cards with glow ── */
   .card-hover-glow {
-    @apply bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 hover:-translate-y-0.5;
+    @apply bg-white rounded-2xl shadow-md border border-earth-200 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 hover:-translate-y-0.5;
   }
 
-  /* Status dot */
+  /* ── Status Dots ── */
   .status-dot {
     @apply w-2 h-2 rounded-full inline-block;
   }
@@ -177,22 +218,48 @@
     @apply w-2 h-2 rounded-full inline-block bg-green-500 animate-pulse;
   }
 
-  /* Timeline */
+  /* ── Timeline ── */
   .timeline-line {
-    @apply absolute left-4 top-8 bottom-0 w-0.5 bg-gray-200;
+    @apply absolute left-4 top-8 bottom-0 w-0.5 bg-earth-200;
   }
 
   .timeline-dot {
     @apply w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 z-10;
   }
 
-  /* FAQ accordion */
+  /* ── FAQ ── */
   .faq-item {
-    @apply border border-gray-100 rounded-xl overflow-hidden transition-all duration-200;
+    @apply border border-earth-200 rounded-xl overflow-hidden transition-all duration-200;
+  }
+
+  /* ── Illustrated icon circle (for landing features) ── */
+  .icon-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary-300);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    transition: all 0.3s ease;
+  }
+  .icon-circle:hover,
+  .group:hover .icon-circle {
+    border-color: var(--color-terra);
+    background: var(--color-primary-50);
+    transform: scale(1.08);
+  }
+  .icon-circle svg {
+    width: 28px;
+    height: 28px;
+    stroke: var(--color-primary-600);
+    stroke-width: 1.8;
+    fill: none;
   }
 }
 
-/* Animations */
+/* ========== Animations ========== */
 @keyframes fadeSlideUp {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
@@ -214,6 +281,24 @@
   100% { background-position: 200% 0; }
 }
 
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes gentleSway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes birdFly {
+  0% { transform: translateX(-20px) translateY(0); }
+  25% { transform: translateX(0) translateY(-5px); }
+  50% { transform: translateX(20px) translateY(0); }
+  75% { transform: translateX(0) translateY(-3px); }
+  100% { transform: translateX(-20px) translateY(0); }
+}
+
 .animate-fade-slide-up {
   animation: fadeSlideUp 0.4s ease-out;
 }
@@ -232,22 +317,34 @@
   animation: shimmer 1.5s infinite;
 }
 
-/* Scrollbar */
+.animate-float {
+  animation: gentleFloat 4s ease-in-out infinite;
+}
+
+.animate-sway {
+  animation: gentleSway 5s ease-in-out infinite;
+}
+
+.animate-bird {
+  animation: birdFly 8s ease-in-out infinite;
+}
+
+/* ========== Scrollbar ========== */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: var(--color-cream-dark);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #94a3b8;
+  background: var(--color-earth-400);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
+  background: var(--color-earth-600);
 }
 
 /* ========== Voice Input Styles ========== */
@@ -322,12 +419,12 @@
 
 /* Field filled flash */
 @keyframes fieldFlash {
-  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
-  50% { box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2); }
-  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(91, 122, 74, 0.4); }
+  50% { box-shadow: 0 0 0 4px rgba(91, 122, 74, 0.2); }
+  100% { box-shadow: 0 0 0 0 rgba(91, 122, 74, 0); }
 }
 
 .voice-field-flash {
   animation: fieldFlash 0.8s ease-out;
-  border-color: #22c55e !important;
+  border-color: var(--color-primary-500) !important;
 }
