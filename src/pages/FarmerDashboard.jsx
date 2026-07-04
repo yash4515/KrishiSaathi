@@ -6,10 +6,18 @@ import { useAuth } from '../hooks/useAuth';
 import { mockCrops, mockOrders, mockWeather } from '../data/mockData';
 import {
     Package, DollarSign, ShoppingCart, TrendingUp,
-    Cloud, Droplets, Wind, CheckCircle, Clock, Truck, FileCheck, ArrowRight
+    Cloud, Droplets, Wind, CheckCircle, Clock, Truck, FileCheck, ArrowRight,
+    Sun, CloudSun, CloudRain, CloudLightning
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cropAPI } from '../services/api';
+
+const getWeatherIcon = (iconStr) => {
+    if (iconStr === '☀️') return <Sun className="w-5 h-5 text-yellow-300 mx-auto" />;
+    if (iconStr === '⛅') return <CloudSun className="w-5 h-5 text-blue-100 mx-auto" />;
+    if (iconStr === '🌦️' || iconStr === '🌧️') return <CloudRain className="w-5 h-5 text-blue-200 mx-auto" />;
+    return <Sun className="w-5 h-5 text-yellow-300 mx-auto" />;
+};
 
 export default function FarmerDashboard() {
     const { user } = useAuth();
@@ -73,7 +81,7 @@ export default function FarmerDashboard() {
             <div className="mb-8">
                 <motion.h1 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
                     className="page-title">
-                    {t('farmer_dashboard.welcome')} {user?.name || t('auth.role_farmer')} 👋
+                    {t('farmer_dashboard.welcome')} {user?.name || t('auth.role_farmer')}
                 </motion.h1>
                 <p className="page-subtitle">{t('farmer_dashboard.subtitle')}</p>
             </div>
@@ -109,7 +117,7 @@ export default function FarmerDashboard() {
             </div>
 
             {/* Weather + Earnings */}
-            <div className="grid lg:grid-cols-2 gap-6 mb-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {/* Weather */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
                     className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white">
@@ -131,7 +139,7 @@ export default function FarmerDashboard() {
                         {mockWeather.forecast.map(f => (
                             <div key={f.day} className="text-center bg-white/10 rounded-xl py-2 px-1">
                                 <p className="text-xs text-blue-100">{f.day}</p>
-                                <p className="text-lg my-1">{f.icon}</p>
+                                <p className="my-1 flex justify-center">{getWeatherIcon(f.icon)}</p>
                                 <p className="text-xs font-semibold">{f.high}°</p>
                             </div>
                         ))}

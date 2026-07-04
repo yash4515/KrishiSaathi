@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import DashboardLayout from '../components/layout/DashboardLayout';
-import { Upload, Plus, X, MapPin, Image, FileText, Mic } from 'lucide-react';
+import { Upload, Plus, X, MapPin, Image, FileText, Mic, CheckCircle } from 'lucide-react';
 import { cropAPI } from '../services/api';
 import useVoiceInput from '../hooks/useVoiceInput';
 import VoiceInputButton from '../components/ui/VoiceInputButton';
@@ -168,12 +168,12 @@ export default function FarmerUploadCrop() {
     };
 
     const categories = [
-        { value: 'grains', label: `🌾 ${t('upload_page.cat_grains')}` },
-        { value: 'vegetables', label: `🥬 ${t('upload_page.cat_vegetables')}` },
-        { value: 'fruits', label: `🍎 ${t('upload_page.cat_fruits')}` },
-        { value: 'pulses', label: `🫘 ${t('upload_page.cat_pulses')}` },
-        { value: 'spices', label: `🌶️ ${t('upload_page.cat_spices')}` },
-        { value: 'cash_crops', label: `🌿 ${t('upload_page.cat_cash_crops')}` },
+        { value: 'grains', label: t('upload_page.cat_grains') },
+        { value: 'vegetables', label: t('upload_page.cat_vegetables') },
+        { value: 'fruits', label: t('upload_page.cat_fruits') },
+        { value: 'pulses', label: t('upload_page.cat_pulses') },
+        { value: 'spices', label: t('upload_page.cat_spices') },
+        { value: 'cash_crops', label: t('upload_page.cat_cash_crops') },
     ];
 
     // Helper: field class with optional flash
@@ -222,14 +222,14 @@ export default function FarmerUploadCrop() {
                     />
                 </motion.div>
 
-                {/* Success Banner */}
+                 {/* Success Banner */}
                 {success && (
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3"
                     >
-                        <span className="text-2xl">✅</span>
+                        <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0" />
                         <div>
                             <p className="font-semibold text-green-800">{t('upload_page.listing_published')}</p>
                             <p className="text-sm text-green-600">{t('upload_page.listing_success')}</p>

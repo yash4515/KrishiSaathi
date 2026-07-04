@@ -6,10 +6,10 @@ import { Send, Bot, User, Mic, Leaf } from 'lucide-react';
 import { sendMessageToOpenAI } from '../services/openaiService';
 
 const quickActions = [
-    '🌾 Crop prices today',
-    '🌦️ Weather forecast',
-    '🧪 Fertilizer advice',
-    '🛡️ Insurance help',
+    'Crop prices today',
+    'Weather forecast',
+    'Fertilizer advice',
+    'Insurance help',
 ];
 
 

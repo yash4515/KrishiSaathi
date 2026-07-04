@@ -1,0 +1,262 @@
+# KrishiSaathi — Implementation Plan
+
+**Version:** 1.0  
+**Author:** Yash Mishra  
+**Date:** June 2026
+
+---
+
+## Overview
+
+This implementation plan breaks the KrishiSaathi platform into three phases across 6 months, following an iterative delivery approach. Each phase ends with a deployable release.
+
+---
+
+## Phase 1 — Core MVP (Weeks 1–8)
+*Target: Farmers can list crops; buyers can browse and bid; AI detects disease*
+
+### Sprint 1 (Week 1–2): Project Foundation
+**Goal:** Repo setup, environment configuration, core auth
+
+Tasks:
+- Initialize monorepo: React + Vite frontend, Node.js backend, Python AI service
+- Configure TailwindCSS, Framer Motion, React Router
+- Set up MongoDB Atlas cluster and Mongoose connection
+- Implement User schema (name, email, password, role, location)
+- Build POST `/api/auth/register` and POST `/api/auth/login`
+- JWT middleware + protected route pattern
+- AuthContext in React (login/logout/me)
+- Landing page + Login/Register pages (UI)
+- i18next setup with en/hi/mr locales
+- Configure Cloudinary account and upload utility
+- Set up GitHub Actions CI workflow
+
+Deliverable: Working auth flow (register → login → protected dashboard)
+
+### Sprint 2 (Week 3–4): AI Disease Detection
+**Goal:** Core AI feature — leaf photo → diagnosis → treatment
+
+Tasks:
+- Set up Python FastAPI project structure
+- Download PlantVillage dataset (or configure demo mode)
+- Implement MobileNetV2 transfer learning (train.py)
+- Build `/predict` endpoint accepting multipart image upload
+- Implement demo mode with treatments.json fallback
+- Build `/health` endpoint
+- Create Detection schema in MongoDB
+- Build backend route POST `/api/detection/predict` (proxy to AI service)
+- Store detection results (image URL via Cloudinary, result JSON)
+- Detection history API GET `/api/detection/history`
+- Disease Detection page UI (upload, camera, result card with treatment)
+- Detection history page
+
+Deliverable: Full disease detection flow end-to-end
+
+### Sprint 3 (Week 5–6): Marketplace & Real-time Bidding
+**Goal:** Farmers list crops; buyers bid in real-time
+
+Tasks:
+- Build Crop schema with all fields (photos, location, status, bids)
+- CRUD routes for `/api/crops`
+- Image upload for crop photos via Cloudinary + Multer
+- Socket.IO setup on backend (bid rooms per listing)
+- Bid schema and bid-placement logic
+- Highest bid tracking + outbid event broadcast
+- Marketplace listing page UI (grid view, search, filter)
+- Crop detail page with bid history + live bid feed
+- "Place Bid" modal with amount input
+- Farmer's listings dashboard
+- "Create Listing" form with voice upload trigger
+
+Deliverable: End-to-end real-time bidding marketplace
+
+### Sprint 4 (Week 7–8): Orders & Payments
+**Goal:** Buyers can place orders and pay via Razorpay
+
+Tasks:
+- Order schema with payment sub-document
+- Razorpay integration: create order (backend) + verify signature
+- POST `/api/orders`, GET `/api/orders/my`
+- Order status update flow (farmer confirms → ships → delivered)
+- Order history UI for buyers and farmers
+- Payment status page (success/failure)
+- Email notification stubs (console log for MVP)
+- Basic admin view (order list)
+
+Deliverable: Full purchase + payment flow
+
+**Phase 1 Milestone: MVP Launch on Vercel + Render + MongoDB Atlas**
+
+---
+
+## Phase 2 — Feature Expansion (Weeks 9–16)
+*Target: Agri Store, Insurance, AI Chat, News/Prices, full multilingual*
+
+### Sprint 5 (Week 9–10): Agri Store
+**Goal:** E-commerce for seeds, fertilizers, tools
+
+Tasks:
+- StoreProduct schema and admin seeding script
+- Store product routes: GET `/api/store/products`, GET `/api/store/products/:id`
+- Cart state management (React, localStorage-backed for MVP)
+- Checkout with Razorpay (reuse payment infra)
+- StoreOrder schema and routes
+- Agri Store page UI (product grid, categories, search)
+- Product detail page
+- Cart sidebar / drawer
+- Store order confirmation page
+
+Deliverable: Functional agri-store with payment
+
+### Sprint 6 (Week 11–12): Crop Insurance Module
+**Goal:** Farmers discover and apply for insurance schemes
+
+Tasks:
+- InsuranceScheme schema + seed 5–8 popular schemes (PMFBY, etc.)
+- Insurance routes: GET `/api/insurance/schemes`, GET `/api/insurance/schemes/:id`
+- InsuranceApplication schema + POST `/api/insurance/apply`
+- Insurance browsing page UI (filter by crop, state, type)
+- Scheme detail page (coverage, eligibility, documents)
+- Application form (crop, land area, season)
+- Application status tracking
+
+Deliverable: Insurance discovery and application flow
+
+### Sprint 7 (Week 13–14): AI Chat Support & News
+**Goal:** 24/7 farming assistant and live market intelligence
+
+Tasks:
+- AI Chat backend integration (OpenAI/Claude API proxy route)
+- ChatHistory schema and persistence
+- Multilingual chat (pass language header to AI API)
+- Chat UI: fixed chat window, message bubbles, typing indicator
+- Krishi Samachar: fetch from agri news API (e.g., newsdata.io filtered to agriculture)
+- Mandi price feed: integrate via agmarknet API or scrape cache
+- News cache schema with 1-hour TTL
+- News page UI (news cards, market price table)
+- Weather widget (OpenWeatherMap API, user location)
+
+Deliverable: AI chat and live news/prices features
+
+### Sprint 8 (Week 15–16): Multilingual Completion + Profile
+**Goal:** Full localization across all features; user profile management
+
+Tasks:
+- Complete all i18n translations (en, hi, mr) for all new pages (Phases 1+2)
+- Language switcher in navbar
+- Store language preference in user profile
+- User profile page UI (photo upload, name, phone, location, language)
+- PUT `/api/auth/profile` endpoint
+- Cloudinary profile photo upload
+- Password change in profile
+- Breadcrumb navigation, back buttons for low-tech users
+- User onboarding flow (role selection post-signup)
+
+Deliverable: Fully localized platform with profile management
+
+**Phase 2 Milestone: Full Feature Release**
+
+---
+
+## Phase 3 — Polish & Scale (Weeks 17–24)
+*Target: Voice commands, PWA, analytics, performance optimisation*
+
+### Sprint 9 (Week 17–18): Voice Commands
+**Goal:** Hands-free crop upload and app navigation
+
+Tasks:
+- Web Speech API integration hook (useVoiceCommand)
+- Voice trigger for crop listing upload ("नई फसल जोड़ें")
+- Voice navigation for key flows
+- Visual feedback during voice recognition
+- Multilingual voice command vocabulary (en, hi, mr)
+- Fallback to manual input on unsupported browsers
+
+### Sprint 10 (Week 19–20): PWA & Offline Support
+**Goal:** Works offline and installable on mobile
+
+Tasks:
+- Service worker via Vite PWA plugin
+- Cache static assets, last-loaded marketplace data
+- Offline fallback page
+- Push notification support (bidding alerts, order updates)
+- App install prompt
+- Icons and manifest.json for homescreen install
+
+### Sprint 11 (Week 21–22): Analytics & Admin Dashboard
+**Goal:** Visibility into platform usage for admin
+
+Tasks:
+- Admin role with protected routes
+- Platform stats: total users, active listings, orders, detections
+- Charts: orders over time, top crops, disease frequency
+- User management (view, deactivate accounts)
+- Content moderation (flag/remove listings)
+- Report export (CSV)
+
+### Sprint 12 (Week 23–24): Performance & Production Readiness
+**Goal:** Production-grade performance and reliability
+
+Tasks:
+- MongoDB query optimization (add missing indexes, explain plan analysis)
+- API response caching with Redis (optional upgrade from Render free plan)
+- Lazy loading routes with React.lazy + Suspense
+- Image optimization (WebP via Cloudinary transformations)
+- Error monitoring setup (Sentry free tier)
+- Frontend bundle analysis and code splitting
+- Load testing (k6 or Artillery) to validate 10K concurrent user target
+- Security audit: OWASP Top 10 checklist
+- API documentation with Swagger/OpenAPI
+- Final E2E test suite (Playwright)
+
+**Phase 3 Milestone: Production Launch v1.0**
+
+---
+
+## Task Priority Matrix
+
+| Feature | Priority | Effort | Phase |
+|---|---|---|---|
+| Authentication | P0 | Low | 1 |
+| Disease Detection | P0 | High | 1 |
+| Marketplace (list + browse) | P0 | Medium | 1 |
+| Real-time Bidding | P0 | High | 1 |
+| Orders + Razorpay | P0 | Medium | 1 |
+| Multilingual (base) | P0 | Medium | 1 |
+| Agri Store | P1 | Medium | 2 |
+| Crop Insurance | P1 | Low | 2 |
+| AI Chat | P1 | Medium | 2 |
+| News + Prices | P1 | Low | 2 |
+| Profile Management | P1 | Low | 2 |
+| Voice Commands | P2 | High | 3 |
+| PWA | P2 | Medium | 3 |
+| Admin Dashboard | P2 | Medium | 3 |
+| Performance Optimization | P2 | High | 3 |
+
+---
+
+## Risks & Mitigations
+
+| Risk | Likelihood | Impact | Mitigation |
+|---|---|---|---|
+| AI model training time/accuracy | High | High | Demo mode as fallback; use pre-trained weights |
+| Render free tier cold starts (30s) | High | Medium | Frontend loading spinner; retry logic |
+| Razorpay KYC delay for live payments | Medium | High | Use test mode for development; start KYC early |
+| MongoDB 512MB Atlas free tier limit | Medium | Medium | Archive old detections/bids; upgrade at scale |
+| Web Speech API browser support | High | Low | Manual input fallback always available |
+| i18n translation quality (Marathi) | Medium | Medium | Native speaker review; community contribution |
+| Socket.IO scaling on free Render | Medium | Medium | Connection limiting; upgrade for production |
+
+---
+
+## Definition of Done
+
+A feature is complete when:
+1. API endpoint returns correct responses with edge case handling
+2. UI renders correctly on Chrome, Firefox, Safari (desktop + mobile)
+3. Feature works in all 3 languages (English, Hindi, Marathi)
+4. Loading and error states are handled in UI
+5. Code is committed to main branch with meaningful commit message
+6. Manual QA pass on staging deployment
+
+

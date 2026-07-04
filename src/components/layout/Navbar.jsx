@@ -4,9 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import {
-    Menu, X, Sprout, LogIn, UserPlus, LogOut,
+    Menu, X, LogIn, UserPlus, LogOut,
     LayoutDashboard, ShoppingCart, Shield, MessageCircle,
-    ChevronDown, User
+    ChevronDown, User, Newspaper
 } from 'lucide-react';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
 
@@ -19,17 +19,22 @@ export default function Navbar() {
     const { t, i18n } = useTranslation();
 
     const isDashboard = location.pathname.startsWith('/farmer') || location.pathname.startsWith('/buyer');
+    const isHomePage = location.pathname === '/';
 
+    // Full nav links for logged-in users
     const publicLinks = [
         { to: '/#features', label: t('navbar.features') },
         { to: '/marketplace', label: t('navbar.marketplace') },
         { to: '/store', label: t('navbar.agri_store') },
         { to: '/insurance', label: t('navbar.insurance') },
-        { to: '/newsletter', label: t('navbar.samachar') || '📰 Newsletter' },
+        { to: '/newsletter', label: t('navbar.samachar') || 'Newsletter' },
         { to: '/detect', label: t('navbar.detect') },
     ];
 
-
+    // Minimal nav links for non-logged-in users on home page
+    const minimalLinks = [
+        { to: '/newsletter', label: t('navbar.samachar') || 'Newsletter', icon: Newspaper },
+    ];
 
     const handleLogout = () => {
         logout();
@@ -39,15 +44,21 @@ export default function Navbar() {
 
     if (isDashboard) return null;
 
+    // Determine which links to show
+    const showMinimalNav = !user && isHomePage;
+    const navLinks = showMinimalNav ? minimalLinks : publicLinks;
+
     return (
         <nav className="fixed top-0 left-0 right-0 z-50 glass shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
-                    {/* Logo — earthy countryside style */}
+                    {/* Logo */}
                     <Link to="/" className="flex items-center gap-2 group">
-                        <div className="w-9 h-9 rounded-xl bg-primary-600 flex items-center justify-center shadow-md group-hover:bg-primary-700 transition-colors">
-                            <Sprout className="w-5 h-5 text-white" />
-                        </div>
+                        <img
+                            src="/photos/logo.png"
+                            alt="KrishiSaathi Logo"
+                            className="w-9 h-9 rounded-xl object-cover shadow-md"
+                        />
                         <span className="font-display text-xl font-bold text-primary-800 group-hover:text-primary-600 transition-colors">
                             KrishiSaathi
                         </span>
@@ -55,7 +66,7 @@ export default function Navbar() {
 
                     {/* Desktop Links */}
                     <div className="hidden md:flex items-center gap-1">
-                        {publicLinks.map(link => (
+                        {navLinks.map(link => (
                             <Link
                                 key={link.to}
                                 to={link.to}
@@ -112,7 +123,7 @@ export default function Navbar() {
                             </div>
                         ) : (
                             <>
-                                <Link to="/login" className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all" style={{ color: '#5A4A32' }}>
+                                <Link to="/login" className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all text-white shadow-md" style={{ background: '#C2714F' }}>
                                     <LogIn className="w-4 h-4" /> {t('navbar.login')}
                                 </Link>
                                 <Link to="/signup" className="btn-terra text-sm !py-2 !px-5 flex items-center gap-2 !rounded-full">
@@ -146,7 +157,7 @@ export default function Navbar() {
                             <div className="flex justify-center mb-4">
                                 <LanguageSwitcher />
                             </div>
-                            {publicLinks.map(link => (
+                            {navLinks.map(link => (
                                 <Link
                                     key={link.to}
                                     to={link.to}
@@ -169,10 +180,10 @@ export default function Navbar() {
                                 </>
                             ) : (
                                 <>
-                                    <Link to="/login" className="block px-4 py-3 text-sm font-medium rounded-xl hover:bg-primary-50" style={{ color: '#5A4A32' }} onClick={() => setOpen(false)}>
+                                    <Link to="/login" className="block px-4 py-3 text-sm font-medium rounded-xl text-center text-white" style={{ background: '#C2714F' }} onClick={() => setOpen(false)}>
                                         {t('navbar.login')}
                                     </Link>
-                                    <Link to="/signup" className="block px-4 py-3 text-sm font-medium text-white bg-terra rounded-xl text-center" style={{ background: '#C2714F' }} onClick={() => setOpen(false)}>
+                                    <Link to="/signup" className="block px-4 py-3 text-sm font-medium text-white rounded-xl text-center mt-1" style={{ background: '#C2714F' }} onClick={() => setOpen(false)}>
                                         {t('navbar.signup')}
                                     </Link>
                                 </>

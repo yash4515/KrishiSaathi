@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import { mockCrops } from '../data/mockData';
-import { Search, MapPin, Star, ShoppingCart, X, SlidersHorizontal, Phone, Heart } from 'lucide-react';
+import { Search, MapPin, Star, ShoppingCart, X, SlidersHorizontal, Phone, Heart, Sprout } from 'lucide-react';
 import { marketAPI } from '../services/api';
 
 export default function BuyerMarketplace() {
@@ -31,7 +31,7 @@ export default function BuyerMarketplace() {
                         priceRange: `₹${c.priceRange.min} - ₹${c.priceRange.max}`,
                         location: c.location,
                         category: c.category,
-                        image: c.images?.[0]?.url || '🌾',
+                        image: c.images?.[0]?.url || null,
                         rating: 4.8,
                         bids: 0,
                         farmer: c.farmerId?.name || 'Local Farmer'
@@ -73,7 +73,7 @@ export default function BuyerMarketplace() {
         <DashboardLayout>
             {/* Header */}
             <div className="mb-6">
-                <h1 className="page-title">🌾 {t('marketplace_page.title')}</h1>
+                <h1 className="page-title">{t('marketplace_page.title')}</h1>
                 <p className="page-subtitle">{t('marketplace_page.subtitle')}</p>
             </div>
 
@@ -108,11 +108,11 @@ export default function BuyerMarketplace() {
                         viewport={{ once: true }} transition={{ delay: i * 0.05 }}
                         className="card-hover-glow group">
                         <div className="h-48 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center overflow-hidden relative">
-                            {c.image.startsWith('/') ? (
+                            {c.image && c.image.startsWith('/') ? (
                                 <img src={c.image} alt={t(`mock.${c.name}`, { defaultValue: c.name })} loading="lazy"
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                             ) : (
-                                <span className="text-5xl group-hover:scale-105 transition-transform duration-500">{c.image}</span>
+                                <Sprout className="w-12 h-12 text-primary-500 group-hover:scale-105 transition-transform duration-500" />
                             )}
                             <button
                                 onClick={() => toggleSave(c.id)}
@@ -151,8 +151,8 @@ export default function BuyerMarketplace() {
             </div>
 
             {filtered.length === 0 && (
-                <div className="text-center py-20">
-                    <p className="text-5xl mb-4">🔍</p>
+                <div className="text-center py-20 flex flex-col items-center justify-center">
+                    <Search className="w-16 h-16 text-gray-300 mb-4" />
                     <p className="text-xl font-semibold text-gray-700">{t('marketplace_page.no_crops')}</p>
                     <p className="text-gray-500">{t('marketplace_page.no_crops_hint')}</p>
                 </div>
@@ -169,10 +169,10 @@ export default function BuyerMarketplace() {
                         </div>
                         <div className="flex items-center gap-3 mb-4 p-3 bg-gray-50 rounded-xl">
                             <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-primary-100 flex items-center justify-center text-3xl">
-                                {showBid.image.startsWith('/') ? (
+                                {showBid.image && showBid.image.startsWith('/') ? (
                                     <img src={showBid.image} alt={t(`mock.${showBid.name}`, { defaultValue: showBid.name })} className="w-full h-full object-cover" />
                                 ) : (
-                                    <span>{showBid.image}</span>
+                                    <Sprout className="w-8 h-8 text-primary-500" />
                                 )}
                             </div>
                             <div>

@@ -4,7 +4,7 @@ import { mockCrops } from '../data/mockData';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { useTranslation } from 'react-i18next';
-import { Search, SlidersHorizontal, MapPin, Star, ShoppingCart, X } from 'lucide-react';
+import { Search, SlidersHorizontal, MapPin, Star, ShoppingCart, X, Sprout } from 'lucide-react';
 
 export default function MarketplacePage() {
     const { t } = useTranslation();
@@ -29,7 +29,7 @@ export default function MarketplacePage() {
             <Navbar />
             <div className="pt-20 pb-16 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
                 <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">🌾 {t('marketplace_page.crop_marketplace')}</h1>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2 font-display">{t('marketplace_page.crop_marketplace')}</h1>
                     <p className="text-gray-500 mb-6">{t('marketplace_page.subtitle')}</p>
                 </motion.div>
 
@@ -53,10 +53,10 @@ export default function MarketplacePage() {
                     {filtered.map((c, i) => (
                         <motion.div key={c.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-all group">
                             <div className="h-48 bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center overflow-hidden">
-                                {c.image.startsWith('/') ? (
+                                {c.image && c.image.startsWith('/') ? (
                                     <img src={c.image} alt={t(`mock.${c.name}`, { defaultValue: c.name })} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                 ) : (
-                                    <span className="text-5xl group-hover:scale-105 transition-transform duration-500">{c.image}</span>
+                                    <Sprout className="w-12 h-12 text-primary-500 group-hover:scale-105 transition-transform duration-500" />
                                 )}
                             </div>
                             <div className="p-4">
@@ -82,8 +82,8 @@ export default function MarketplacePage() {
                 </div>
 
                 {filtered.length === 0 && (
-                    <div className="text-center py-20">
-                        <p className="text-5xl mb-4">🔍</p>
+                    <div className="text-center py-20 flex flex-col items-center justify-center">
+                        <Search className="w-16 h-16 text-gray-300 mb-4" />
                         <p className="text-xl font-semibold text-gray-700">{t('marketplace_page.no_crops')}</p>
                         <p className="text-gray-500">{t('marketplace_page.no_crops_hint')}</p>
                     </div>
@@ -100,10 +100,10 @@ export default function MarketplacePage() {
                         </div>
                         <div className="flex items-center gap-3 mb-4 p-3 bg-gray-50 rounded-xl">
                             <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-primary-100 flex items-center justify-center text-3xl">
-                                {showBid.image.startsWith('/') ? (
+                                {showBid.image && showBid.image.startsWith('/') ? (
                                     <img src={showBid.image} alt={t(`mock.${showBid.name}`, { defaultValue: showBid.name })} className="w-full h-full object-cover" />
                                 ) : (
-                                    <span>{showBid.image}</span>
+                                    <Sprout className="w-10 h-10 text-primary-500" />
                                 )}
                             </div>
                             <div>
