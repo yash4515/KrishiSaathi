@@ -32,7 +32,11 @@ export default function LoginPage() {
             const user = await login(form.email, form.password);
             navigate(`/${user.role}`);
         } catch (err) {
-            setError('Invalid credentials. Try again.');
+            const msg =
+                err?.response?.data?.message ||
+                err?.message ||
+                'Invalid credentials. Try again.';
+            setError(msg);
         } finally {
             setLoading(false);
         }

@@ -31,8 +31,13 @@ export default function SignupPage() {
         try {
             const user = await signup(form);
             navigate(`/${user.role}`);
-        } catch {
-            setError('Signup failed. Try again.');
+        } catch (err) {
+            const msg =
+                err?.response?.data?.message ||
+                err?.response?.data?.errors?.map((e) => e.message).join(', ') ||
+                err?.message ||
+                'Signup failed. Try again.';
+            setError(msg);
         } finally {
             setLoading(false);
         }
