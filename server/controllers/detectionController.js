@@ -1,5 +1,5 @@
 const Detection = require('../models/Detection');
-const http = require('http');
+const axios = require('axios');
 const FormData = require('form-data');
 
 const AI_SERVICE_URL = process.env.AI_SERVICE_URL || 'http://localhost:5005';
@@ -18,36 +18,18 @@ exports.detectDisease = async (req, res, next) => {
             contentType: req.file.mimetype,
         });
 
-        const aiResponse = await new Promise((resolve, reject) => {
-            const url = new URL('/predict', AI_SERVICE_URL);
-            const options = {
-                hostname: url.hostname,
-                port: url.port,
-                path: url.pathname,
-                method: 'POST',
+        let aiResponse;
+        try {
+            const url = new URL('/predict', AI_SERVICE_URL).toString();
+            const response = await axios.post(url, formData, {
                 headers: formData.getHeaders(),
-            };
-
-            const aiReq = http.request(options, (aiRes) => {
-                let data = '';
-                aiRes.on('data', (chunk) => (data += chunk));
-                aiRes.on('end', () => {
-                    if (aiRes.statusCode < 200 || aiRes.statusCode >= 300) {
-                        console.error(`❌ AI service responded with status ${aiRes.statusCode}:`, data);
-                        return reject(new Error(`AI service returned status code ${aiRes.statusCode}`));
-                    }
-                    try {
-                        resolve(JSON.parse(data));
-                    } catch (err) {
-                        console.error('❌ Failed to parse AI service response:', data);
-                        reject(new Error('Invalid response from AI service'));
-                    }
-                });
             });
-
-            aiReq.on('error', (err) => reject(err));
-            formData.pipe(aiReq);
-        });
+            aiResponse = response.data;
+        } catch (err) {
+            const statusCode = err.response ? err.response.status : 'unknown';
+            console.error(`❌ AI service error:`, err.message, err.response ? err.response.data : '');
+            throw new Error(`AI service returned status code ${statusCode}`);
+        }
 
         if (!aiResponse.success) {
             return res.status(502).json({
