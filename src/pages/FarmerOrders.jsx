@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import { mockOrders } from '../data/mockData';
-import { CheckCircle, Clock, Truck, FileCheck, Search, Filter, Download } from 'lucide-react';
+import { CheckCircle, Clock, Truck, FileCheck, Search, Filter, Download, ClipboardList } from 'lucide-react';
 
 export default function FarmerOrders() {
     const { t } = useTranslation();
@@ -121,8 +121,8 @@ export default function FarmerOrders() {
                     </table>
                 </div>
                 {filtered.length === 0 && (
-                    <div className="text-center py-12">
-                        <p className="text-4xl mb-3">📋</p>
+                    <div className="text-center py-12 flex flex-col items-center justify-center">
+                        <ClipboardList className="w-12 h-12 text-gray-300 mb-3" />
                         <p className="text-gray-600 font-medium">{t('orders_page.no_orders')}</p>
                         <p className="text-sm text-gray-400">{t('orders_page.no_orders_hint')}</p>
                     </div>

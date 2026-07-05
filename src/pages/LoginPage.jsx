@@ -3,7 +3,7 @@ import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
-import { Sprout, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import NotificationAlert from '../components/ui/NotificationAlert';
 
 export default function LoginPage() {
@@ -54,9 +54,7 @@ export default function LoginPage() {
                     className="w-full max-w-md"
                 >
                     <Link to="/" className="flex items-center gap-2 mb-10">
-                        <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-md">
-                            <Sprout className="w-6 h-6 text-white" />
-                        </div>
+                        <img src="/photos/logo.png" alt="KrishiSaathi Logo" className="w-10 h-10 rounded-xl object-cover shadow-md" />
                         <span className="text-xl font-bold text-primary-800">KrishiSaathi</span>
                     </Link>
 
@@ -128,10 +126,10 @@ export default function LoginPage() {
                         </div>
                         <div className="grid grid-cols-2 gap-3 mt-4">
                             <button className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
-                                <span className="text-lg">🔵</span> Google
+                                Google
                             </button>
                             <button className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
-                                <span className="text-lg">🔷</span> Facebook
+                                Facebook
                             </button>
                         </div>
                     </div>
@@ -145,23 +143,30 @@ export default function LoginPage() {
                 </motion.div>
             </div>
 
-            {/* Right: Visual */}
-            <div className="hidden lg:flex flex-1 gradient-primary items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-10 left-10 w-40 h-40 rounded-full border-2 border-white" />
-                    <div className="absolute bottom-20 right-10 w-60 h-60 rounded-full border-2 border-white" />
-                    <div className="absolute top-1/3 right-1/3 w-32 h-32 rounded-full border-2 border-white" />
-                </div>
+            {/* Right: Visual (Farmer Illustration) */}
+            <div className="hidden lg:flex flex-1 bg-cream items-center justify-center relative overflow-hidden border-l border-earth-100">
+                {/* Branch decoration */}
+                <img
+                    src="/photos/branch-decoration.png"
+                    alt=""
+                    className="absolute top-0 right-0 w-64 opacity-40 pointer-events-none"
+                    aria-hidden="true"
+                />
+                
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="text-center relative z-10"
+                    transition={{ delay: 0.2 }}
+                    className="text-center p-8 relative z-10 max-w-lg"
                 >
-                    <div className="text-[120px] mb-6">👨‍🌾</div>
-                    <h2 className="text-3xl font-bold text-white mb-3">Welcome to KrishiSaathi</h2>
-                    <p className="text-primary-100 text-lg max-w-sm">
-                        Your trusted digital partner for modern farming success.
+                    <img
+                        src="/photos/farmer-field.png"
+                        alt="Farmer in the field"
+                        className="w-full max-w-sm mx-auto mb-6 drop-shadow-lg"
+                    />
+                    <h2 className="font-display text-3xl font-bold text-primary-800 mb-3">Welcome to KrishiSaathi</h2>
+                    <p className="text-earth-600 text-base leading-relaxed">
+                        Your trusted digital partner for modern farming success. Connect directly with buyers and access crop insights.
                     </p>
                 </motion.div>
             </div>

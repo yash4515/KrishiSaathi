@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import { mockOrders } from '../data/mockData';
-import { CheckCircle, Clock, Truck, FileCheck, Search, Download, Eye } from 'lucide-react';
+import { CheckCircle, Clock, Truck, FileCheck, Search, Download, Eye, Sprout, ClipboardList } from 'lucide-react';
 
 export default function BuyerOrders() {
     const { t } = useTranslation();
@@ -76,8 +76,8 @@ export default function BuyerOrders() {
                             className="bg-white rounded-2xl shadow-md border border-gray-100 p-5 hover:shadow-lg transition-shadow">
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-14 h-14 rounded-xl bg-primary-50 flex items-center justify-center text-2xl flex-shrink-0">
-                                        🌾
+                                    <div className="w-14 h-14 rounded-xl bg-primary-50 flex items-center justify-center flex-shrink-0 text-primary-600">
+                                        <Sprout className="w-6 h-6" />
                                     </div>
                                     <div>
                                         <p className="font-semibold text-gray-900">{t(`mock.${o.crop}`, { defaultValue: o.crop })}</p>
@@ -125,8 +125,8 @@ export default function BuyerOrders() {
             </div>
 
             {filtered.length === 0 && (
-                <div className="text-center py-16">
-                    <p className="text-5xl mb-4">📋</p>
+                <div className="text-center py-16 flex flex-col items-center justify-center">
+                    <ClipboardList className="w-16 h-16 text-gray-300 mb-4" />
                     <p className="text-lg font-semibold text-gray-700">{t('orders_page.no_orders')}</p>
                     <p className="text-gray-500 text-sm mt-1">{t('orders_page.no_orders_hint')}</p>
                 </div>

@@ -6,19 +6,13 @@ import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import { useTranslation } from 'react-i18next';
-import { Star, ShoppingCart, Plus, Minus, Check } from 'lucide-react';
+import { Star, ShoppingCart, Plus, Minus, Check, Leaf, Box, ShieldAlert } from 'lucide-react';
 
 const tabs = [
-    { id: 'fertilizers', label: '🧪 Fertilizers' },
-    { id: 'seeds', label: '🌱 Seeds' },
-    { id: 'tools', label: '🔧 Tools' },
+    { id: 'fertilizers', label: 'Fertilizers' },
+    { id: 'seeds', label: 'Seeds' },
+    { id: 'tools', label: 'Tools' },
 ];
-
-const categoryEmojis = {
-    fertilizers: '🧪',
-    seeds: '🌱',
-    tools: '🔧',
-};
 
 function StoreContent() {
     const { t } = useTranslation();
@@ -27,6 +21,10 @@ function StoreContent() {
     const [added, setAdded] = useState(null);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const getCategoryIcon = (category) => {
+        return <Leaf className="w-8 h-8 text-primary-500" />;
+    };
 
     useEffect(() => {
         setLoading(true);
@@ -39,13 +37,18 @@ function StoreContent() {
                     price: `₹${p.price.toLocaleString('en-IN')}`,
                     unit: p.unit,
                     rating: p.rating,
-                    image: p.image?.url || categoryEmojis[p.category] || '📦',
+                    image: p.image?.url || null,
                     desc: p.description,
+                    category: p.category,
                 }));
                 setProducts(dbProducts);
             })
             .catch(() => {
-                setProducts(mockStoreProducts[activeTab] || []);
+                const localProducts = (mockStoreProducts[activeTab] || []).map(p => ({
+                    ...p,
+                    image: null // Remove emojis in mockData fallback
+                }));
+                setProducts(localProducts);
             })
             .finally(() => setLoading(false));
     }, [activeTab]);
@@ -59,7 +62,7 @@ function StoreContent() {
     return (
         <>
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-                <h1 className="page-title mb-1">🏪 {t('store.title')}</h1>
+                <h1 className="page-title mb-1 font-display">{t('store.title')}</h1>
                 <p className="page-subtitle mb-6">{t('store.desc')}</p>
             </motion.div>
 
@@ -68,7 +71,7 @@ function StoreContent() {
                 {tabs.map(tabItem => (
                     <button key={tabItem.id} onClick={() => setActiveTab(tabItem.id)}
                         className={activeTab === tabItem.id ? 'filter-chip-active' : 'filter-chip'}>
-                        {tabItem.id === 'fertilizers' ? '🧪 ' + t('store.fertilizers') : tabItem.id === 'seeds' ? '🌱 ' + t('store.seeds') : '🔧 ' + t('store.tools')}
+                        {tabItem.id === 'fertilizers' ? t('store.fertilizers') : tabItem.id === 'seeds' ? t('store.seeds') : t('store.tools')}
                     </button>
                 ))}
                 {Object.values(cart).reduce((a, b) => a + b, 0) > 0 && (
@@ -92,8 +95,12 @@ function StoreContent() {
                     {products.map((p, i) => (
                         <motion.div key={p.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.08 }} className="card-hover-glow">
-                            <div className="h-32 bg-gradient-to-br from-earth-50 to-primary-50 flex items-center justify-center text-5xl">
-                                {p.image}
+                            <div className="h-32 bg-gradient-to-br from-earth-50 to-primary-50 flex items-center justify-center">
+                                {p.image ? (
+                                    <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
+                                ) : (
+                                    getCategoryIcon(p.category)
+                                )}
                             </div>
                             <div className="p-4">
                                 <div className="flex items-start justify-between gap-2">

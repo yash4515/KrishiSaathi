@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Sprout, Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
 import { FarmHut, TreeSilhouette } from '../ui/FarmIllustrations';
 
 export default function Footer() {
@@ -21,9 +21,7 @@ export default function Footer() {
                     {/* Brand */}
                     <div>
                         <Link to="/" className="flex items-center gap-2 mb-4">
-                            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(163,191,148,0.2)' }}>
-                                <Sprout className="w-6 h-6" style={{ color: '#A3BF94' }} />
-                            </div>
+                            <img src="/photos/logo.png" alt="KrishiSaathi Logo" className="w-10 h-10 rounded-xl object-cover" style={{ filter: 'brightness(1.3)' }} />
                             <span className="font-display text-xl font-bold text-white">KrishiSaathi</span>
                         </Link>
                         <p className="text-sm leading-relaxed mb-4" style={{ color: '#A3BF94' }}>
@@ -105,11 +103,11 @@ export default function Footer() {
                             </li>
                             <li className="flex items-center gap-2 text-sm" style={{ color: '#A3BF94' }}>
                                 <Phone className="w-4 h-4 flex-shrink-0" />
-                                +91 1800-123-4567
+                                +91 7269045561
                             </li>
                             <li className="flex items-center gap-2 text-sm" style={{ color: '#A3BF94' }}>
                                 <Mail className="w-4 h-4 flex-shrink-0" />
-                                help@krishisaathi.in
+                                krishisaathi@gmail.com
                             </li>
                         </ul>
                     </div>

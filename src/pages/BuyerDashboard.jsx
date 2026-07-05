@@ -7,7 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import { mockCrops, mockOrders, mockSavedItems } from '../data/mockData';
 import {
     ShoppingCart, TrendingUp, Package, DollarSign, Heart,
-    ArrowRight, Star, MapPin, Clock, CheckCircle, Truck, FileCheck
+    ArrowRight, Star, MapPin, Clock, CheckCircle, Truck, FileCheck, Sprout
 } from 'lucide-react';
 import { marketAPI } from '../services/api';
 
@@ -34,7 +34,7 @@ export default function BuyerDashboard() {
                         quantity: `${c.quantity} ${c.unit}`,
                         priceRange: `₹${c.priceRange.min} - ₹${c.priceRange.max}`,
                         location: c.location,
-                        image: c.images?.[0]?.url || '🌾',
+                        image: c.images?.[0]?.url || null,
                         rating: 4.8,
                         farmer: c.farmerId?.name || 'Local Farmer'
                     }));
@@ -55,7 +55,7 @@ export default function BuyerDashboard() {
             {/* Header */}
             <div className="mb-8">
                 <motion.h1 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="page-title">
-                    {t('buyer_dashboard.welcome')} {user?.name || t('auth.role_buyer')} 🏪
+                    {t('buyer_dashboard.welcome')} {user?.name || t('auth.role_buyer')}
                 </motion.h1>
                 <p className="page-subtitle">{t('buyer_dashboard.subtitle')}</p>
             </div>
@@ -122,10 +122,10 @@ export default function BuyerDashboard() {
                         {mockSavedItems.map(item => (
                             <div key={item.id} className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 transition-colors">
                                 <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 bg-primary-50">
-                                    {item.image.startsWith('/') ? (
+                                    {item.image && item.image.startsWith('/') ? (
                                         <img src={item.image} alt={t(`mock.${item.name}`, { defaultValue: item.name })} className="w-full h-full object-cover" />
                                     ) : (
-                                        <span className="flex items-center justify-center h-full text-2xl">{item.image}</span>
+                                        <span className="flex items-center justify-center h-full text-primary-500"><Sprout className="w-5 h-5" /></span>
                                     )}
                                 </div>
                                 <div className="min-w-0 flex-1">
@@ -153,12 +153,12 @@ export default function BuyerDashboard() {
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {recommendedCrops.map((c, i) => (
                         <motion.div key={c.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 + i * 0.05 }}
-                            className="card-hover-glow">
-                            <div className="h-28 bg-primary-50 flex items-center justify-center text-4xl overflow-hidden">
-                                {c.image.startsWith('/') ? (
+                             className="card-hover-glow">
+                            <div className="h-28 bg-primary-50 flex items-center justify-center overflow-hidden">
+                                {c.image && c.image.startsWith('/') ? (
                                     <img src={c.image} alt={t(`mock.${c.name}`, { defaultValue: c.name })} className="w-full h-full object-cover" loading="lazy" />
                                 ) : (
-                                    c.image
+                                    <Sprout className="w-8 h-8 text-primary-500" />
                                 )}
                             </div>
                             <div className="p-4">

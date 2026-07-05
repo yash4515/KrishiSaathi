@@ -3,16 +3,13 @@ import { motion } from 'framer-motion';
 import {
     TrendingUp, Users, ShoppingCart, CloudSun,
     Shield, MessageCircle, ArrowRight, CheckCircle, Smartphone,
-    Zap, Globe, BarChart3, Leaf, LayoutDashboard, Sprout
+    Zap, Globe, BarChart3, Leaf, LayoutDashboard, Sprout,
+    UserPlus, ClipboardList, Handshake, Store, Tractor
 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import WaveDivider from '../components/ui/WaveDivider';
-import {
-    FarmerFigure, CattlePair, WheatStalks, FarmHut,
-    FlyingBirds, SunRays, TreeSilhouette, LeafBranch,
-    GroundHorizon, BullockCart
-} from '../components/ui/FarmIllustrations';
+import { WheatStalks, GroundHorizon } from '../components/ui/FarmIllustrations';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks/useAuth';
 
@@ -55,9 +52,9 @@ export default function LandingPage() {
     ];
 
     const steps = [
-        { num: '01', title: t('landing.step_1_title'), desc: t('landing.step_1_desc'), icon: '👤' },
-        { num: '02', title: t('landing.step_2_title'), desc: t('landing.step_2_desc'), icon: '📋' },
-        { num: '03', title: t('landing.step_3_title'), desc: t('landing.step_3_desc'), icon: '🤝' },
+        { num: '01', title: t('landing.step_1_title'), desc: t('landing.step_1_desc'), Icon: UserPlus },
+        { num: '02', title: t('landing.step_2_title'), desc: t('landing.step_2_desc'), Icon: ClipboardList },
+        { num: '03', title: t('landing.step_3_title'), desc: t('landing.step_3_desc'), Icon: Handshake },
     ];
 
     const benefits = [
@@ -73,37 +70,33 @@ export default function LandingPage() {
         <div style={{ background: C.cream }}>
             <Navbar />
 
-            {/* ═══════════ HERO — Illustrated Countryside Horizon ═══════════ */}
+            {/* ═══════════ HERO — Clean with Farmer Illustration ═══════════ */}
             <section className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-20" style={{ background: C.cream }}>
 
-                {/* Decorative: sun top-right */}
-                <div className="absolute top-24 right-8 md:right-16 animate-float" style={{ opacity: 0.7 }}>
-                    <SunRays size={120} />
-                </div>
-
-                {/* Decorative: birds top-left, scattered */}
-                <div className="absolute top-32 left-12 animate-bird" style={{ animationDelay: '0s' }}>
-                    <FlyingBirds size={50} />
-                </div>
-                <div className="absolute top-48 left-1/3 animate-bird" style={{ animationDelay: '2s', opacity: 0.5 }}>
-                    <FlyingBirds size={35} />
-                </div>
-                <div className="absolute top-28 right-1/4 animate-bird" style={{ animationDelay: '4s', opacity: 0.6 }}>
-                    <FlyingBirds size={40} />
-                </div>
-
-                {/* Decorative: leaf branch bleeding off right edge */}
-                <div className="hidden lg:block absolute top-1/3 -right-6" style={{ opacity: 0.5 }}>
-                    <LeafBranch size={160} />
-                </div>
+                {/* Branch decoration — top-right corner */}
+                <img
+                    src="/photos/branch-decoration.png"
+                    alt=""
+                    className="hidden lg:block absolute top-0 right-0 w-52 md:w-64 opacity-50 pointer-events-none"
+                    style={{ transform: 'scaleX(1)' }}
+                    aria-hidden="true"
+                />
+                {/* Branch decoration — bottom-left corner (mirrored) */}
+                <img
+                    src="/photos/branch-decoration.png"
+                    alt=""
+                    className="hidden lg:block absolute bottom-24 left-0 w-44 opacity-30 pointer-events-none"
+                    style={{ transform: 'scaleX(-1) rotate(180deg)' }}
+                    aria-hidden="true"
+                />
 
                 {/* ── Main content ── */}
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 z-10">
-                    <div className="grid lg:grid-cols-2 gap-8 items-end">
+                    <div className="grid lg:grid-cols-2 gap-8 items-center">
                         {/* Left: Text */}
                         <motion.div {...fadeUp} className="pt-8 md:pt-16 lg:pt-0">
                             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 border-2 border-primary-300" style={{ background: C.olive50 }}>
-                                <Sprout className="w-4 h-4 text-primary-600" />
+                                <img src="/photos/logo.png" alt="" className="w-5 h-5 rounded object-cover" />
                                 <span className="text-sm font-semibold text-primary-700">{t('landing.hero_tagline')}</span>
                             </div>
 
@@ -132,10 +125,10 @@ export default function LandingPage() {
                                 <>
                                     <div className="flex flex-col sm:flex-row gap-4 mb-6">
                                         <Link to="/login" className="group btn-terra text-lg !py-4 !px-8 flex items-center justify-center gap-3 shadow-lg">
-                                            <span className="text-2xl">👨‍🌾</span> {t('landing.login_farmer')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                            <Tractor className="w-6 h-6" /> {t('landing.login_farmer')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                         </Link>
                                         <Link to="/login" className="group btn-accent text-lg !py-4 !px-8 flex items-center justify-center gap-3">
-                                            <span className="text-2xl">🏪</span> {t('landing.login_buyer')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                            <Store className="w-6 h-6" /> {t('landing.login_buyer')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                         </Link>
                                     </div>
                                     <p className="text-sm" style={{ color: '#78592F' }}>
@@ -147,7 +140,7 @@ export default function LandingPage() {
                                 </>
                             )}
 
-                            {/* Stats — wooden sign-post style */}
+                            {/* Stats */}
                             <div className="flex items-center gap-6 md:gap-8 mt-10 p-5 md:p-6 rounded-2xl border-2 border-earth-300 w-fit" style={{ background: 'rgba(245,236,218,0.8)' }}>
                                 {[
                                     { val: '50K+', label: t('landing.stats_farmers') },
@@ -165,38 +158,18 @@ export default function LandingPage() {
                             </div>
                         </motion.div>
 
-                        {/* Right: Illustrated scene */}
+                        {/* Right: Farmer Field Illustration */}
                         <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.8, delay: 0.3 }}
-                            className="hidden lg:block relative"
-                            style={{ minHeight: 380 }}
+                            className="hidden lg:flex justify-center items-center"
                         >
-                            {/* Farmer standing */}
-                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 animate-sway" style={{ transformOrigin: 'bottom center' }}>
-                                <FarmerFigure size={160} />
-                            </div>
-                            {/* Hut behind-left */}
-                            <div className="absolute bottom-2 left-4" style={{ opacity: 0.7 }}>
-                                <FarmHut size={90} />
-                            </div>
-                            {/* Wheat right */}
-                            <div className="absolute bottom-0 right-8 animate-sway" style={{ animationDelay: '1s', transformOrigin: 'bottom center' }}>
-                                <WheatStalks size={70} />
-                            </div>
-                            {/* Cattle far right */}
-                            <div className="absolute bottom-4 right-0" style={{ opacity: 0.55 }}>
-                                <CattlePair size={110} />
-                            </div>
-                            {/* Tree far left */}
-                            <div className="absolute bottom-0 -left-4" style={{ opacity: 0.35 }}>
-                                <TreeSilhouette size={70} />
-                            </div>
-                            {/* Bullock cart (extra scene element) */}
-                            <div className="absolute bottom-6 left-1/4" style={{ opacity: 0.35 }}>
-                                <BullockCart size={100} />
-                            </div>
+                            <img
+                                src="/photos/farmer-field.png"
+                                alt="Farmer in rice paddy field"
+                                className="w-full max-w-lg drop-shadow-xl"
+                            />
                         </motion.div>
                     </div>
                 </div>
@@ -221,7 +194,7 @@ export default function LandingPage() {
                                     <WheatStalks size={50} />
                                 </div>
                                 <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                    <span className="text-3xl">{user.role === 'farmer' ? '👨‍🌾' : '🏪'}</span>
+                                    {user.role === 'farmer' ? <Tractor className="w-8 h-8 text-white" /> : <Store className="w-8 h-8 text-white" />}
                                 </div>
                                 <h2 className="font-display text-2xl md:text-3xl font-bold text-primary-800 mb-2">
                                     {t('landing.welcome_back') || 'Welcome back'}, {user.name}!
@@ -254,11 +227,9 @@ export default function LandingPage() {
                         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                             <motion.div {...stagger} transition={{ delay: 0.1 }}>
                                 <Link to="/signup" className="block group p-8 bg-white rounded-3xl border-2 border-earth-200 hover:border-primary-400 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
-                                    {/* Decorative farm motif */}
-                                    <div className="absolute -bottom-6 -right-6 opacity-10">
-                                        <FarmerFigure size={100} />
+                                    <div className="w-16 h-16 rounded-2xl bg-primary-50 border-2 border-primary-200 flex items-center justify-center mb-4 group-hover:bg-primary-100 transition-colors">
+                                        <Tractor className="w-8 h-8 text-primary-600" />
                                     </div>
-                                    <div className="text-6xl mb-4">👨‍🌾</div>
                                     <h3 className="font-display text-2xl font-bold text-primary-800 mb-2 group-hover:text-primary-600 transition-colors">{t('landing.im_farmer')}</h3>
                                     <p className="mb-4" style={{ color: '#5A4A32' }}>{t('landing.farmer_desc')}</p>
                                     <ul className="space-y-2 text-sm" style={{ color: '#5A4A32' }}>
@@ -274,10 +245,9 @@ export default function LandingPage() {
 
                             <motion.div {...stagger} transition={{ delay: 0.2 }}>
                                 <Link to="/signup" className="block group p-8 bg-white rounded-3xl border-2 border-earth-200 hover:border-accent-500 hover:shadow-2xl transition-all duration-300 relative overflow-hidden">
-                                    <div className="absolute -bottom-4 -right-4 opacity-10">
-                                        <BullockCart size={120} />
+                                    <div className="w-16 h-16 rounded-2xl bg-accent-50 border-2 border-accent-200 flex items-center justify-center mb-4 group-hover:bg-accent-100 transition-colors">
+                                        <Store className="w-8 h-8 text-accent-600" />
                                     </div>
-                                    <div className="text-6xl mb-4">🏪</div>
                                     <h3 className="font-display text-2xl font-bold text-primary-800 mb-2 group-hover:text-accent-600 transition-colors">{t('landing.im_buyer')}</h3>
                                     <p className="mb-4" style={{ color: '#5A4A32' }}>{t('landing.buyer_desc')}</p>
                                     <ul className="space-y-2 text-sm" style={{ color: '#5A4A32' }}>
@@ -300,14 +270,13 @@ export default function LandingPage() {
             <WaveDivider colorFrom={C.olive50} colorTo={C.cream} variant="hill" />
 
             <section id="features" className="section-padding relative" style={{ background: C.cream }}>
-                {/* Decorative: birds bleeding off left edge */}
-                <div className="hidden md:block absolute top-12 -left-3 opacity-40">
-                    <FlyingBirds size={55} />
-                </div>
-                {/* Decorative: leaf branch bleeding off right edge */}
-                <div className="hidden lg:block absolute bottom-16 -right-8 opacity-30">
-                    <LeafBranch size={140} />
-                </div>
+                {/* Decorative: branch on right edge */}
+                <img
+                    src="/photos/branch-decoration.png"
+                    alt=""
+                    className="hidden lg:block absolute bottom-0 -right-4 w-40 opacity-25 pointer-events-none"
+                    aria-hidden="true"
+                />
 
                 <div className="max-w-7xl mx-auto">
                     <motion.div {...fadeUp} className="text-center mb-16">
@@ -341,10 +310,6 @@ export default function LandingPage() {
             <WaveDivider colorFrom={C.cream} colorTo={C.creamDark} variant="gentle" />
 
             <section className="section-padding relative" style={{ background: C.creamDark }}>
-                {/* Decorative: small tree on right */}
-                <div className="hidden lg:block absolute bottom-0 right-8 opacity-20">
-                    <TreeSilhouette size={90} />
-                </div>
 
                 <div className="max-w-7xl mx-auto">
                     <motion.div {...fadeUp} className="text-center mb-16">
@@ -363,7 +328,7 @@ export default function LandingPage() {
                                 transition={{ delay: i * 0.15, duration: 0.5 }}
                                 className="relative text-center p-8 bg-white rounded-2xl shadow-md border border-earth-200 z-10"
                             >
-                                <div className="text-5xl mb-4">{s.icon}</div>
+                                <div className="icon-circle mx-auto mb-4"><s.Icon /></div>
                                 <span className="font-display text-5xl font-bold text-primary-100">{s.num}</span>
                                 <h3 className="font-display text-xl font-bold text-primary-800 mt-2 mb-2">{s.title}</h3>
                                 <p className="text-sm" style={{ color: '#5A4A32' }}>{s.desc}</p>
@@ -378,10 +343,14 @@ export default function LandingPage() {
             <WaveDivider colorFrom={C.creamDark} colorTo={C.cream} variant="wave" />
 
             <section className="section-padding relative overflow-hidden" style={{ background: C.cream }}>
-                {/* Decorative: wheat on left edge */}
-                <div className="hidden md:block absolute -left-4 bottom-12 opacity-25">
-                    <WheatStalks size={70} />
-                </div>
+                {/* Market illustration decorative */}
+                <img
+                    src="/photos/market-scene.png"
+                    alt=""
+                    className="hidden lg:block absolute -left-8 bottom-0 w-72 opacity-15 pointer-events-none"
+                    style={{ transform: 'scaleX(-1)' }}
+                    aria-hidden="true"
+                />
 
                 <div className="max-w-7xl mx-auto">
                     <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -413,10 +382,7 @@ export default function LandingPage() {
                             transition={{ duration: 0.6 }}
                             className="grid grid-cols-2 gap-4 relative"
                         >
-                            {/* Decorative farmer figure */}
-                            <div className="absolute -top-16 -right-8 opacity-20 hidden lg:block">
-                                <FarmerFigure size={100} />
-                            </div>
+
 
                             {[
                                 { icon: Zap, val: '30%', label: t('landing.higher_income') },
@@ -442,21 +408,6 @@ export default function LandingPage() {
             <WaveDivider colorFrom={C.cream} colorTo={C.olive600} variant="hill" />
 
             <section className="section-padding text-white relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${C.olive600}, ${C.olive800})` }}>
-                {/* Decorative: birds across the top */}
-                <div className="absolute top-8 left-1/4 opacity-40">
-                    <FlyingBirds size={50} style={{ filter: 'brightness(3)' }} />
-                </div>
-                <div className="absolute top-16 right-1/3 opacity-30">
-                    <FlyingBirds size={35} style={{ filter: 'brightness(3)' }} />
-                </div>
-
-                {/* Ground/silhouette at bottom */}
-                <div className="absolute bottom-0 left-0 right-0 flex items-end justify-between opacity-20 px-8">
-                    <FarmHut size={70} style={{ filter: 'brightness(2.5)' }} />
-                    <TreeSilhouette size={60} style={{ filter: 'brightness(2.5)' }} />
-                    <FarmHut size={55} style={{ filter: 'brightness(2.5)' }} />
-                    <TreeSilhouette size={70} style={{ filter: 'brightness(2.5)' }} />
-                </div>
 
                 <div className="max-w-7xl mx-auto relative z-10">
                     <motion.div {...fadeUp} className="text-center">
@@ -467,10 +418,10 @@ export default function LandingPage() {
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <button className="font-semibold py-3 px-8 rounded-xl transition-colors flex items-center justify-center gap-2 bg-white hover:bg-cream" style={{ color: C.olive600 }}>
-                                <span className="text-2xl">📱</span> Google Play
+                                <Smartphone className="w-5 h-5" /> Google Play
                             </button>
                             <button className="bg-white/10 border-2 border-white/30 text-white font-semibold py-3 px-8 rounded-xl hover:bg-white/20 transition-colors flex items-center justify-center gap-2">
-                                <span className="text-2xl">🍎</span> App Store
+                                <Smartphone className="w-5 h-5" /> App Store
                             </button>
                         </div>
                     </motion.div>

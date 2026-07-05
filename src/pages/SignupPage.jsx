@@ -3,7 +3,7 @@ import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
-import { Sprout, User, Mail, Phone, Lock, Eye, EyeOff, ArrowRight, CheckCircle } from 'lucide-react';
+import { User, Mail, Phone, Lock, Eye, EyeOff, ArrowRight, CheckCircle, Tractor, Store } from 'lucide-react';
 import NotificationAlert from '../components/ui/NotificationAlert';
 
 export default function SignupPage() {
@@ -48,14 +48,14 @@ export default function SignupPage() {
     const roles = [
         {
             id: 'farmer',
-            emoji: '👨‍🌾',
+            Icon: Tractor,
             title: 'Farmer',
             desc: 'Sell crops, track orders, get insights',
             features: ['List crops', 'Weather updates', 'Crop insurance'],
         },
         {
             id: 'buyer',
-            emoji: '🏪',
+            Icon: Store,
             title: 'Buyer',
             desc: 'Browse crops, place bids, buy fresh',
             features: ['Browse marketplace', 'Direct contact', 'Track delivery'],
@@ -66,21 +66,30 @@ export default function SignupPage() {
         <div className="min-h-screen flex">
             <NotificationAlert type="error" message={error} show={!!error} onClose={() => setError('')} />
 
-            {/* Left: Visual */}
-            <div className="hidden lg:flex flex-1 bg-gradient-to-br from-primary-700 to-primary-500 items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-20 right-20 w-48 h-48 rounded-full border-2 border-white" />
-                    <div className="absolute bottom-10 left-10 w-36 h-36 rounded-full border-2 border-white" />
-                </div>
+            {/* Left: Visual (Farmer Illustration) */}
+            <div className="hidden lg:flex flex-1 bg-cream items-center justify-center relative overflow-hidden border-r border-earth-100">
+                {/* Branch decoration */}
+                <img
+                    src="/photos/branch-decoration.png"
+                    alt=""
+                    className="absolute top-0 left-0 w-64 opacity-40 pointer-events-none"
+                    style={{ transform: 'scaleX(-1)' }}
+                    aria-hidden="true"
+                />
+                
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="text-center relative z-10"
+                    transition={{ delay: 0.2 }}
+                    className="text-center p-8 relative z-10 max-w-lg"
                 >
-                    <div className="text-[120px] mb-6">🌱</div>
-                    <h2 className="text-3xl font-bold text-white mb-3">{t('auth.signup_welcome')}</h2>
-                    <p className="text-primary-100 text-lg max-w-sm">
+                    <img
+                        src="/photos/farmer-field.png"
+                        alt="Farmer in the field"
+                        className="w-full max-w-sm mx-auto mb-6 drop-shadow-lg"
+                    />
+                    <h2 className="font-display text-3xl font-bold text-primary-800 mb-3">{t('auth.signup_welcome')}</h2>
+                    <p className="text-earth-600 text-base leading-relaxed">
                         {t('auth.signup_desc')}
                     </p>
                 </motion.div>
@@ -94,43 +103,46 @@ export default function SignupPage() {
                     className="w-full max-w-md"
                 >
                     <Link to="/" className="flex items-center gap-2 mb-8">
-                        <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-md">
-                            <Sprout className="w-6 h-6 text-white" />
-                        </div>
-                        <span className="text-xl font-bold text-primary-800">KrishiSaathi</span>
+                        <img src="/photos/logo.png" alt="KrishiSaathi Logo" className="w-10 h-10 rounded-xl object-cover shadow-md" />
+                        <span className="text-xl font-bold text-primary-800 font-display">KrishiSaathi</span>
                     </Link>
 
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('auth.create_account')}</h1>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2 font-display">{t('auth.create_account')}</h1>
                     <p className="text-gray-500 mb-6">{t('auth.signup_desc')}</p>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {/* Role Selector Cards */}
                         <div className="grid grid-cols-2 gap-3 mb-2">
-                            {roles.map(role => (
-                                <button
-                                    key={role.id}
-                                    type="button"
-                                    onClick={() => setForm({ ...form, role: role.id })}
-                                    className={`p-4 rounded-xl text-left transition-all border-2 ${form.role === role.id
-                                        ? 'border-primary-500 bg-primary-50 shadow-md'
-                                        : 'border-gray-200 hover:border-gray-300'
-                                        }`}
-                                >
-                                    <div className="text-3xl mb-2">{role.emoji}</div>
-                                    <p className={`font-bold text-sm ${form.role === role.id ? 'text-primary-700' : 'text-gray-800'}`}>{role.title}</p>
-                                    <p className="text-xs text-gray-500 mt-0.5">{role.desc}</p>
-                                    {form.role === role.id && (
-                                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                                            className="mt-2 space-y-1">
-                                            {role.features.map(f => (
-                                                <p key={f} className="text-[11px] text-primary-600 flex items-center gap-1">
-                                                    <CheckCircle className="w-3 h-3" /> {f}
-                                                </p>
-                                            ))}
-                                        </motion.div>
-                                    )}
-                                </button>
-                            ))}
+                            {roles.map(role => {
+                                const RoleIcon = role.Icon;
+                                return (
+                                    <button
+                                        key={role.id}
+                                        type="button"
+                                        onClick={() => setForm({ ...form, role: role.id })}
+                                        className={`p-4 rounded-xl text-left transition-all border-2 ${form.role === role.id
+                                            ? 'border-primary-500 bg-primary-50 shadow-md'
+                                            : 'border-gray-200 hover:border-gray-300'
+                                            }`}
+                                    >
+                                        <div className="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600 mb-2">
+                                            <RoleIcon className="w-5 h-5" />
+                                        </div>
+                                        <p className={`font-bold text-sm ${form.role === role.id ? 'text-primary-700' : 'text-gray-800'}`}>{role.title}</p>
+                                        <p className="text-xs text-gray-500 mt-0.5">{role.desc}</p>
+                                        {form.role === role.id && (
+                                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                                                className="mt-2 space-y-1">
+                                                {role.features.map(f => (
+                                                    <p key={f} className="text-[11px] text-primary-600 flex items-center gap-1">
+                                                        <CheckCircle className="w-3 h-3" /> {f}
+                                                    </p>
+                                                ))}
+                                            </motion.div>
+                                        )}
+                                    </button>
+                                );
+                            })}
                         </div>
 
                         <div>
@@ -195,10 +207,10 @@ export default function SignupPage() {
                         </div>
                         <div className="grid grid-cols-2 gap-3 mt-4">
                             <button className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
-                                <span className="text-lg">🔵</span> Google
+                                Google
                             </button>
                             <button className="flex items-center justify-center gap-2 py-2.5 px-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
-                                <span className="text-lg">🔷</span> Facebook
+                                Facebook
                             </button>
                         </div>
                     </div>

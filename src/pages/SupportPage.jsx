@@ -96,8 +96,8 @@ export default function SupportPage() {
                         );
                     })}
                     {mockSupportTickets.length === 0 && (
-                        <div className="text-center py-16">
-                            <p className="text-5xl mb-4">🎫</p>
+                        <div className="text-center py-16 flex flex-col items-center justify-center">
+                            <MessageCircle className="w-16 h-16 text-gray-300 mb-4" />
                             <p className="text-lg font-semibold text-gray-700">{t('support_page.no_tickets')}</p>
                             <p className="text-gray-500 text-sm">{t('support_page.no_tickets_hint')}</p>
                         </div>
@@ -140,8 +140,10 @@ export default function SupportPage() {
                         className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6" onClick={e => e.stopPropagation()}>
 
                         {submitted ? (
-                            <div className="text-center py-8">
-                                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-5xl mb-4">✅</motion.div>
+                            <div className="text-center py-8 flex flex-col items-center justify-center">
+                                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="mb-4">
+                                    <CheckCircle className="w-16 h-16 text-green-500" />
+                                </motion.div>
                                 <h3 className="text-lg font-bold text-gray-900 mb-2">{t('support_page.ticket_submitted')}</h3>
                                 <p className="text-sm text-gray-500">{t('support_page.ticket_response')}</p>
                             </div>

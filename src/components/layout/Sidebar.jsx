@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import {
-    Sprout, LayoutDashboard, Package, Upload, ClipboardList,
+    LayoutDashboard, Package, Upload, ClipboardList,
     Store, Shield, HelpCircle, LogOut, Menu, X, ChevronLeft,
     ShoppingCart, Newspaper
 } from 'lucide-react';
@@ -55,9 +55,7 @@ export default function Sidebar() {
             {/* Logo */}
             <div className="flex items-center justify-between p-4 border-b border-gray-100">
                 <Link to="/" className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center shadow-md flex-shrink-0">
-                        <Sprout className="w-5 h-5 text-white" />
-                    </div>
+                    <img src="/photos/logo.png" alt="KrishiSaathi Logo" className="w-9 h-9 rounded-xl object-cover shadow-md flex-shrink-0" />
                     {!collapsed && <span className="text-lg font-bold text-primary-800">KrishiSaathi</span>}
                 </Link>
                 <button
@@ -77,7 +75,7 @@ export default function Sidebar() {
                         </div>
                         <div className="min-w-0">
                             <p className="text-sm font-semibold text-gray-800 truncate">{user.name}</p>
-                            <p className="text-xs text-primary-600 capitalize font-medium">{user.role === 'farmer' ? `👨‍🌾 ${t('sidebar.farmer')}` : `🏪 ${t('sidebar.buyer')}`}</p>
+                            <p className="text-xs text-primary-600 capitalize font-medium">{user.role === 'farmer' ? t('sidebar.farmer') : t('sidebar.buyer')}</p>
                         </div>
                     </div>
                 </div>

@@ -37,7 +37,7 @@ function InsuranceContent() {
     return (
         <>
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-                <h1 className="page-title mb-1">🛡️ {t('insurance.title')}</h1>
+                <h1 className="page-title mb-1 font-display">{t('insurance.title')}</h1>
                 <p className="page-subtitle mb-6">{t('insurance.desc')}</p>
             </motion.div>
 
@@ -138,8 +138,8 @@ function InsuranceContent() {
                         );
                     })}
                     {mockInsuranceClaims.length === 0 && (
-                        <div className="text-center py-16">
-                            <p className="text-5xl mb-4">🛡️</p>
+                        <div className="text-center py-16 flex flex-col items-center justify-center">
+                            <Shield className="w-16 h-16 text-gray-300 mb-4" />
                             <p className="text-lg font-semibold text-gray-700">No claims filed</p>
                             <p className="text-gray-500 text-sm">Apply for insurance and file claims when needed.</p>
                         </div>
