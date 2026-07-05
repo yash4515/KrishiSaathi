@@ -50,6 +50,16 @@ AI-Service/.venv/
 !AI-Service/leaf-map.json
 !AI-Service/class_names.json
 
+# Allow website images in public/photos/ and photos/
+!public/photos/**
+!public/photos/*.jpg
+!public/photos/*.jpeg
+!public/photos/*.png
+!photos/**
+!photos/*.jpg
+!photos/*.jpeg
+!photos/*.png
+
 # Cloned dataset repo (2GB - use git clone separately)
 PlantVillage-Dataset/
 
