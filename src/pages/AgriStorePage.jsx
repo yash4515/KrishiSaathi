@@ -41,7 +41,11 @@ function StoreContent() {
                     desc: p.description,
                     category: p.category,
                 }));
-                setProducts(dbProducts);
+                if (dbProducts && dbProducts.length > 0) {
+                    setProducts(dbProducts);
+                } else {
+                    setProducts(mockStoreProducts[activeTab] || []);
+                }
             })
             .catch(() => {
                 const localProducts = (mockStoreProducts[activeTab] || []).map(p => ({

@@ -20,6 +20,7 @@ const detectionRoutes = require('./routes/detectionRoutes');
 const priceRoutes    = require('./routes/priceRoutes');
 const newsRoutes     = require('./routes/newsRoutes');
 const { initJobs }   = require('./jobs');
+const autoseed       = require('./config/autoseed');
 
 const app = express();
 const server = http.createServer(app);
@@ -123,6 +124,7 @@ const PORT = process.env.PORT || 8000;
 const startServer = async () => {
     try {
         await connectDB();
+        await autoseed();
         initJobs();
         server.listen(PORT, () => {
             console.log(`\n🚀 KrishiSaathi API running on port ${PORT}`);

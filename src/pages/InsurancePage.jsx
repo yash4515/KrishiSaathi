@@ -28,7 +28,11 @@ function InsuranceContent() {
                     id: p._id, name: p.name, premium: p.premium, coverage: p.coverage,
                     crops: p.crops || [], duration: p.duration, features: p.features || [], popular: p.popular || false,
                 }));
-                setPlans(dbPlans);
+                if (dbPlans && dbPlans.length > 0) {
+                    setPlans(dbPlans);
+                } else {
+                    setPlans(mockInsurancePlans);
+                }
             })
             .catch(() => { setPlans(mockInsurancePlans); })
             .finally(() => setLoading(false));
