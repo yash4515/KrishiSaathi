@@ -115,7 +115,7 @@ export default function LandingPage() {
                             {user ? (
                                 <div className="flex flex-col sm:flex-row gap-4 mb-6">
                                     <Link to={`/${user.role}`} className="group btn-terra text-lg !py-4 !px-8 flex items-center justify-center gap-3">
-                                        <LayoutDashboard className="w-6 h-6" /> {t('navbar.dashboard') || 'Go to Dashboard'} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                        <LayoutDashboard className="w-6 h-6" /> {t('sidebar.dashboard') || 'Dashboard'} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                     </Link>
                                     <Link to="/marketplace" className="group btn-secondary !border-primary-400 text-lg !py-4 !px-8 flex items-center justify-center gap-3">
                                         <ShoppingCart className="w-6 h-6" /> {t('navbar.marketplace')} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -204,7 +204,7 @@ export default function LandingPage() {
                                 </p>
                                 <Link to={`/${user.role}`} className="inline-flex items-center gap-2 btn-terra text-lg px-8 py-3">
                                     <LayoutDashboard className="w-5 h-5" />
-                                    {t('navbar.dashboard') || 'Go to Dashboard'}
+                                    {t('sidebar.dashboard') || 'Dashboard'}
                                     <ArrowRight className="w-5 h-5" />
                                 </Link>
                             </div>
